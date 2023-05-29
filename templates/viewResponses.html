@@ -1,0 +1,26 @@
+<!-- Create a Django HTML page that shows all the questions and answers related to a response given through the link -->
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <h1>Responses</h1>
+
+    <!-- Show all questions and answers related to a response -->
+
+    {% for answer in answers_responses %}
+        {% ifchanged answer.response.id %}
+            <h4> {{ answer.response.id }}: {{ answer.response.user }}</h4>
+        {% endifchanged %}
+        <b> {{ answer.answer.question.text }} </b> ==>
+        &emsp;
+        {{ answer.answer.choice.text }}
+        <br>
+    {% endfor %}
+    <br>
+
+    <a href="{% url 'index' %}">
+        <button class="home" type="button">Back to surveys</button>
+    </a>
+
+{% endblock %}
+

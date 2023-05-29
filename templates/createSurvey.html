@@ -1,0 +1,21 @@
+<!-- Create a Django HTML page to create a Survey object (as described in models.py -->
+
+
+<head>
+    <title>Survey</title>
+</head>
+
+<body>
+    <h1>Create your survey!</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+        <a href="{% url 'index' %}">
+            <button class="cancel-link" type="button">Cancel</button>
+        </a>
+    </form>
+</body>
+
+
+

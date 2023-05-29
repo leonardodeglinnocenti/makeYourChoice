@@ -1,0 +1,69 @@
+<!-- Create a Django page to show all surveys -->
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <title>Surveys</title>
+</head>
+<body>
+    <h1>Surveys</h1>
+
+    <!-- don't show elements if user is not logged in -->
+    {% if user.is_authenticated %}
+        <!-- select surveys that haven't been taken by current user -->
+        <ul>
+            {% for survey in surveys %}
+                <li> {{ survey.name }} - {{ survey.description }}
+                <!-- Put a tick if the user has already taken the survey -->
+                {% for response in responses %}
+                    {% if response.user == user and response.survey.id == survey.id %}
+                        &#10004;
+                    {% endif %}
+                {% endfor %}
+                <a href="{% url 'takeSurvey' survey.id %}">
+                    <button class="open" type="button">Take</button>
+                </a>
+                {% if survey.id == response.survey_id and user.id == response.user_id %}
+                        <p>Already taken</p>
+                {% endif %}
+                {% if user.is_staff %}
+                    <a href="{% url 'viewSurvey' survey.id %}">
+                        <button class="open" type="button">Open</button>
+                    </a>
+                    <!-- add a button to take survey -->
+                    <a href="{% url 'viewResponses' survey.id %}">
+                        <button  class="edit" type="button">Results</button>
+                    </a>
+                    <a href="{% url 'deleteSurvey' survey.id %}">
+                        <button class="delete" type="button">Delete</button>
+                    </a>
+                {% elif survey.user == user %}
+                    <a href="{% url 'viewSurvey' survey.id %}">
+                        <button class="open" type="button">Open</button>
+                    </a>
+                    <!-- add a button to take survey -->
+                    <a href="{% url 'viewResponses' survey.id %}">
+                        <button  class="edit" type="button">Results</button>
+                    </a>
+                    <a href="{% url 'deleteSurvey' survey.id %}">
+                        <button class="delete" type="button">Delete</button>
+                    </a>
+                {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        <!-- Create a Django button to open create survey page -->
+        <a href="{% url 'createSurvey' %}">
+            <button class="new" type="button">Create a new survey</button>
+        </a>
+
+    {% else %}
+        <p>Please login to view surveys!</p>
+    {% endif %}
+
+</body>
+
+{% endblock %}
+

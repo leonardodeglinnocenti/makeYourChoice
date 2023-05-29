@@ -1,0 +1,15 @@
+<!-- Create a Django HTML page to login -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username">
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password">
+    <button type="submit">Login</button>
+</form>
+{% endblock %}
+
+

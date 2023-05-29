@@ -1,0 +1,20 @@
+<!-- templates/base.html -->
+{% load static %}
+<!-- check whether the user is authenticated or not -->
+{% if user.is_authenticated %}
+    <p> Welcome, {{ user.username }}!</p>
+    <a href="{% url 'logout_user' %}">Logout</a>
+{% else %}
+    <a href="{% url 'login_user' %}">Login</a>
+    <a href="{% url 'register_user' %}">Register</a>
+{% endif %}
+    <div class="message">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% block content %}
+{% endblock %}
+

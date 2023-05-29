@@ -1,0 +1,41 @@
+<!-- Create Django HTML page to view a Survey and add questions -->
+
+{% block content %}
+
+    <ul>
+        {% for question in questions %}
+            <li>
+                <h3>{{ question.text }}</h3>
+                <!-- Show all choices related to a question -->
+                <ul>
+                    {% for choice in question.choice_set.all %}
+                        <li>
+                            {{ choice.text }}
+                            <a href="{% url 'deleteChoice' choice.id %}">
+                                <button class="delete" type="button">Delete</button>
+                            </a>
+                        </li>
+                    {% endfor %}
+                <a href="{% url 'addChoice' question.id %}">
+                    <button class="new" type="button">Add choice</button>
+                </a>
+                </ul>
+            </li>
+            <!-- Add link to delete this question -->
+            <a href="{% url 'deleteQuestion' question.id %}">
+                <button class="delete" type="button">Delete question</button>
+            </a>
+        {% endfor %}
+    </ul>
+
+    <!-- Add link to add a question to this survey -->
+    <!-- Solved thanks to context data -->
+    <a href="{% url 'addQuestion' survey.get_id%}">
+        <button class="delete" type="button">Add question</button>
+    </a>
+    <a href="{% url 'index' %}">
+        <button class="home" type="button">Back to surveys</button>
+    </a>
+
+
+{% endblock %}
