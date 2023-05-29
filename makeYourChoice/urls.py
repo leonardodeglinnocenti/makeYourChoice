@@ -33,4 +33,7 @@ urlpatterns = [
     path('users/', include('django.contrib.auth.urls')),
     # previous line allows to use django's built-in login and logout views
     path('users/', include('users.urls')),
+    path('createCategory/', views.CreateCategory.as_view(), name='createCategory'),
+    path('deleteCategory/<int:pk>/', views.DeleteCategory.as_view(), name='deleteCategory'),
+    path('manageCategories/', views.ManageCategories.as_view(), name='manageCategories'),
 ]

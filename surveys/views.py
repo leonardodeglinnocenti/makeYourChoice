@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, CreateView, DeleteView
-from .models import Survey, Question, Choice, Answer, Response, AnswerResponse
+from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category
 from .forms import AnswerForm
 
 # Create your views here.
@@ -26,7 +26,7 @@ class ViewSurveys(ListView):
 
 class CreateSurvey(CreateView):
     model = Survey
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'category']
     template_name = 'createSurvey.html'
     success_url = reverse_lazy('index')
 
@@ -217,4 +217,45 @@ class ViewResponses(ListView):
         return AnswerResponse.objects.filter(response__survey_id=self.kwargs['pk'])
 
     # Make this object not accessible to users who are not the owner of the survey or are not staff members
+
+
+class CreateCategory(CreateView):
+    model = Category
+    fields = ['name']
+    template_name = 'createCategory.html'
+
+    def get_success_url(self):
+        return reverse_lazy('index')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class DeleteCategory(DeleteView):
+    model = Category
+    template_name = 'deleteCategory.html'
+
+    def get_success_url(self):
+        return reverse_lazy('index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Category.objects.get(pk=self.kwargs['pk'])
+        return context
+
+    # Checks whether the user is the owner of the category or is a staff member
+    def form_valid(self, form):
+        if self.request.user == Category.objects.get(pk=self.kwargs['pk']).user or self.request.user.is_staff:
+            return super().form_valid(form)
+        else:
+            messages.success(self.request, "You are not the owner of this category, so you cannot delete it")
+            return HttpResponseRedirect(reverse_lazy('index'))
+
+
+class ManageCategories(ListView):
+    model = Category
+    template_name = 'manageCategories.html'
+    context_object_name = 'categories'
+
 

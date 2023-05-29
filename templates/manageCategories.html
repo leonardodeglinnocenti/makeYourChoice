@@ -1,0 +1,24 @@
+{% block content %}
+
+    <ul>
+        {% for category in categories %}
+            <li>
+                <b>{{ category.name }} </b> Created by: {{ category.user }}
+                <!-- Show all choices related to a question -->
+                {% if category.user == user or user.is_staff %}
+                    <a href="{% url 'deleteCategory' category.id %}">
+                        <button class="delete" type="button">Delete</button>
+                    </a>
+                {% endif %}
+
+            </li>
+            <!-- Add link to delete this question -->
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'index' %}">
+        <button class="home" type="button">Back to surveys</button>
+    </a>
+
+
+{% endblock %}
