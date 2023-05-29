@@ -84,3 +84,9 @@ class AnswerResponse(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     response = models.ForeignKey(Response, on_delete=models.CASCADE)
 
+
+class UserCategorySubscription(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+

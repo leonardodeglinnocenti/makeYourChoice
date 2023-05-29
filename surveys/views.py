@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, CreateView, DeleteView
-from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category
+from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
 from .forms import AnswerForm
 
 # Create your views here.
@@ -257,5 +257,37 @@ class ManageCategories(ListView):
     model = Category
     template_name = 'manageCategories.html'
     context_object_name = 'categories'
+
+
+def subscribe_to_category(request, pk):
+    # this function is called when a user clicks the subscribe button on a category
+    # it adds the user to the category's subscribers through UserCategorySubscription
+    # and redirects the user to the index page
+    # check if the user is already subscribed to the category
+    if not UserCategorySubscription.objects.filter(user=request.user, category=Category.objects.get(pk=pk)).exists():
+        category = Category.objects.get(pk=pk)
+        user = request.user
+        UserCategorySubscription.objects.create(user=user, category=category)
+        messages.success(request, "You have successfully subscribed to this category!")
+        return HttpResponseRedirect(reverse_lazy('manageCategories'))
+    else:
+        messages.success(request, "You are already subscribed to this category!")
+        return HttpResponseRedirect(reverse_lazy('manageCategories'))
+
+
+def unsubscribe_from_category(request, pk):
+    # this function is called when a user clicks the unsubscribe button on a category
+    # it removes the user from the category's subscribers through UserCategorySubscription
+    # and redirects the user to the index page
+    # check if the user is already subscribed to the category
+    if UserCategorySubscription.objects.filter(user=request.user, category=Category.objects.get(pk=pk)).exists():
+        category = Category.objects.get(pk=pk)
+        user = request.user
+        UserCategorySubscription.objects.filter(user=user, category=category).delete()
+        messages.success(request, "You have successfully unsubscribed from this category!")
+        return HttpResponseRedirect(reverse_lazy('manageCategories'))
+    else:
+        messages.success(request, "You are not subscribed to this category!")
+        return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
