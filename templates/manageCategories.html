@@ -11,14 +11,17 @@
                         <button class="delete" type="button">Delete</button>
                     </a>
                 {% endif %}
+                {% if category.id in subscribed_categories %}
+                    <a href="{% url 'unsubscribeFromCategory' category.id %}">
+                        <button class="unsubscribe" type="button">Unsubscribe</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'subscribeToCategory' category.id %}">
+                        <button class="subscribe" type="button">Subscribe</button>
+                    </a>
+                {% endif %}
                 <!-- Create a button to subscribe to this category using subscribe_to_category() in views.py -->
-                <a href="{% url 'subscribeToCategory' category.id %}">
-                    <button class="subscribe" type="button">Subscribe</button>
-                </a>
-                <!-- TODO: Make the right button appear according to whether the user is subscribed or not -->
-                <a href="{% url 'unsubscribeFromCategory' category.id %}">
-                    <button class="unsubscribe" type="button">Unsubscribe</button>
-                </a>
+
 
 
             </li>

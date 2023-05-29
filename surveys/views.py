@@ -18,6 +18,10 @@ class ViewSurveys(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['responses'] = Response.objects.all()
+        # get all the surveys related to the categories the user is subscribed to
+        # check whether a user is authenticated
+        if self.request.user.is_authenticated:
+            context['subscribed_surveys'] = Survey.objects.filter(category__in=UserCategorySubscription.objects.filter(user=self.request.user).values_list('category', flat=True))
         return context
 
     def get_queryset(self):
@@ -257,6 +261,12 @@ class ManageCategories(ListView):
     model = Category
     template_name = 'manageCategories.html'
     context_object_name = 'categories'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get all categories that the user is subscribed to
+        context['subscribed_categories'] = UserCategorySubscription.objects.filter(user=self.request.user).values_list('category', flat=True)
+        return context
 
 
 def subscribe_to_category(request, pk):
