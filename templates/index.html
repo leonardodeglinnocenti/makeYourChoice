@@ -4,49 +4,59 @@
 {% load static %}
 {% block content %}
 
-<head>
-    <title>Surveys</title>
-</head>
-<body>
     <h1>Surveys</h1>
 
     <!-- don't show elements if user is not logged in -->
     {% if user.is_authenticated %}
+
+        <!-- Create a Django button to open create survey page -->
+        <a href="{% url 'createSurvey' %}">
+            <button class="new" type="button">Create a new survey</button>
+        </a>
+        <a href="{% url 'manageSurveys' %}">
+            <button class="edit" type="button">Manage surveys</button>
+        </a>
+        <a href="{% url 'manageCategories' %}">
+            <button class="edit" type="button">Manage categories</button>
+        </a>
+
         <!-- select surveys that haven't been taken by current user -->
-        <ul>
+        <ul class="card">
             {% for survey in surveys %}
                 {% if survey in subscribed_surveys %}
-                    <li> {{ survey.name }} : {{ survey.description }} : {{ survey.category }}
+                    <li>
+                        <h2>{{ survey.name }} </h2>
+                        Category: <b>{{ survey.category }}</b> <br>
+                        Created by: <b>{{ survey.user }}</b> <br>
+                        Deadline: <b>{{ survey.deadline }}</b> <br>
+                        Description: <b>{{ survey.description }}</b>
                     <!-- Put a tick if the user has already taken the survey -->
                     {% for response in responses %}
                         {% if response.user == user and response.survey.id == survey.id %}
-                            &#10004; <!-- tick -->
+                            <p class="taken"> &#10004; You already answered to this survey </p> <!-- tick -->
                         {% endif %}
                     {% endfor %}
                     <a href="{% url 'takeSurvey' survey.id %}">
                         <button class="open" type="button">Take</button>
                     </a>
-                    {% if survey.id == response.survey_id and user.id == response.user_id %}
-                            <p>Already taken</p>
-                    {% endif %}
                     {% if user.is_staff %}
                         <a href="{% url 'viewSurvey' survey.id %}">
-                            <button class="open" type="button">Open</button>
+                            <button class="edit" type="button">Edit</button>
                         </a>
                         <!-- add a button to take survey -->
                         <a href="{% url 'viewResponses' survey.id %}">
-                            <button  class="edit" type="button">Results</button>
+                            <button  class="open" type="button">Results</button>
                         </a>
                         <a href="{% url 'deleteSurvey' survey.id %}">
                             <button class="delete" type="button">Delete</button>
                         </a>
                     {% elif survey.user == user %}
                         <a href="{% url 'viewSurvey' survey.id %}">
-                            <button class="open" type="button">Open</button>
+                            <button class="edit" type="button">Edit</button>
                         </a>
                         <!-- add a button to take survey -->
                         <a href="{% url 'viewResponses' survey.id %}">
-                            <button  class="edit" type="button">Results</button>
+                            <button  class="open" type="button">Results</button>
                         </a>
                         <a href="{% url 'deleteSurvey' survey.id %}">
                             <button class="delete" type="button">Delete</button>
@@ -56,22 +66,10 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <!-- Create a Django button to open create survey page -->
-        <a href="{% url 'createSurvey' %}">
-            <button class="new" type="button">Create a new survey</button>
-        </a>
-        <a href="{% url 'manageSurveys' %}">
-            <button class="new" type="button">Manage surveys</button>
-        </a>
-        <a href="{% url 'manageCategories' %}">
-            <button class="new" type="button">Manage categories</button>
-        </a>
 
     {% else %}
         <p>Please login to view surveys!</p>
     {% endif %}
-
-</body>
 
 {% endblock %}
 

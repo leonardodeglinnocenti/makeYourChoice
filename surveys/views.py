@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views.generic import ListView, CreateView, DeleteView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
 from .forms import AnswerForm
 
@@ -30,7 +30,7 @@ class ViewSurveys(ListView):
 
 class CreateSurvey(CreateView):
     model = Survey
-    fields = ['name', 'description', 'category']
+    fields = ['name', 'description', 'category', 'deadline']
     template_name = 'createSurvey.html'
     success_url = reverse_lazy('index')
 
@@ -42,6 +42,7 @@ class CreateSurvey(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = User.objects.get(username=self.request.user.username)
+        context['categories'] = Category.objects.all()
         return context
 
 
@@ -55,7 +56,7 @@ class DeleteSurvey(DeleteView):
         if self.request.user == self.object.user or self.request.user.is_staff:
             return super().form_valid(form)
         else:
-            messages.success(self.request, "You are not the owner of this survey")
+            messages.error(self.request, "You are not the owner of this survey")
             return HttpResponseRedirect(reverse_lazy('index'))
 
 
@@ -72,6 +73,31 @@ class ViewSurvey(ListView):
 
     def get_queryset(self):
         return Question.objects.filter(survey_id=self.kwargs['pk'])
+
+
+class EditSurvey(UpdateView):
+    model = Survey
+    fields = ['name', 'description', 'category', 'deadline']
+    template_name = 'editSurvey.html'
+
+    # This method is called when the form is submitted and adds current user to the survey
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        messages.success(self.request, "Survey edited successfully")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('viewSurvey', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get the survey object
+        context['survey'] = Survey.objects.get(pk=self.kwargs['pk'])
+        # get the user object
+        context['user'] = User.objects.get(username=self.request.user.username)
+        # get all the categories
+        context['categories'] = Category.objects.all()
+        return context
 
 
 class AddQuestion(CreateView):
@@ -92,9 +118,10 @@ class AddQuestion(CreateView):
         form.instance.survey_id = self.kwargs['pk']
         # Check whether the user is the owner of the survey which the question is being added to
         if self.request.user == Survey.objects.get(pk=self.kwargs['pk']).user or self.request.user.is_staff:
+            messages.success(self.request, "Question added successfully")
             return super().form_valid(form)
         else:
-            messages.success(self.request, "You are not the owner of this survey, so you cannot add questions")
+            messages.error(self.request, "You are not the owner of this survey, so you cannot add questions")
             return HttpResponseRedirect(reverse_lazy('index'))
 
 
@@ -113,9 +140,10 @@ class DeleteQuestion(DeleteView):
     # Checks whether the user is the owner of the survey or is a staff member
     def form_valid(self, form):
         if self.request.user == Survey.objects.get(pk=self.object.survey_id).user or self.request.user.is_staff:
+            messages.success(self.request, "Question deleted successfully")
             return super().form_valid(form)
         else:
-            messages.success(self.request, "You are not the owner of this survey, so you cannot delete questions")
+            messages.error(self.request, "You are not the owner of this survey, so you cannot delete questions")
             return HttpResponseRedirect(reverse_lazy('index'))
 
 
@@ -137,9 +165,10 @@ class AddChoice(CreateView):
     def form_valid(self, form):
         form.instance.question_id = self.kwargs['pk']
         if self.request.user == Question.objects.get(pk=self.kwargs['pk']).survey.user or self.request.user.is_staff:
+            messages.success(self.request, "Choice added successfully")
             return super().form_valid(form)
         else:
-            messages.success(self.request, "You are not the owner of this survey, so you cannot add choices")
+            messages.error(self.request, "You are not the owner of this survey, so you cannot add choices")
             return HttpResponseRedirect(reverse_lazy('index'))
 
 
@@ -158,9 +187,10 @@ class DeleteChoice(DeleteView):
     # Checks whether the user is the owner of the survey or is a staff member
     def form_valid(self, form):
         if self.request.user == Question.objects.get(pk=self.object.question_id).survey.user or self.request.user.is_staff:
+            messages.success(self.request, "Choice deleted successfully")
             return super().form_valid(form)
         else:
-            messages.success(self.request, "You are not the owner of this survey, so you cannot delete choices")
+            messages.error(self.request, "You are not the owner of this survey, so you cannot delete choices")
             return HttpResponseRedirect(reverse_lazy('index'))
 
 
@@ -192,6 +222,7 @@ class TakeSurvey(ListView):
                 for question in Question.objects.filter(survey_id=self.kwargs['pk']):
                     answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id)
                     AnswerResponse.objects.create(answer_id=answer.id, response_id=response.id)
+                messages.success(request, 'Survey completed successfully')
                 return HttpResponseRedirect(reverse_lazy('index'))
             else:
                 return render(request, self.template_name, {'form': form, 'survey': Survey.objects.get(pk=self.kwargs['pk'])})
@@ -253,7 +284,7 @@ class DeleteCategory(DeleteView):
         if self.request.user == Category.objects.get(pk=self.kwargs['pk']).user or self.request.user.is_staff:
             return super().form_valid(form)
         else:
-            messages.success(self.request, "You are not the owner of this category, so you cannot delete it")
+            messages.error(self.request, "You are not the owner of this category, so you cannot delete it")
             return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
@@ -281,7 +312,7 @@ def subscribe_to_category(request, pk):
         messages.success(request, "You have successfully subscribed to this category!")
         return HttpResponseRedirect(reverse_lazy('manageCategories'))
     else:
-        messages.success(request, "You are already subscribed to this category!")
+        messages.error(request, "You are already subscribed to this category!")
         return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
@@ -297,7 +328,7 @@ def unsubscribe_from_category(request, pk):
         messages.success(request, "You have successfully unsubscribed from this category!")
         return HttpResponseRedirect(reverse_lazy('manageCategories'))
     else:
-        messages.success(request, "You are not subscribed to this category!")
+        messages.error(request, "You are not subscribed to this category!")
         return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
@@ -312,3 +343,4 @@ class ManageSurveys(ListView):
         # get all surveys that the user owns
         context['owned_surveys'] = Survey.objects.filter(user=self.request.user)
         return context
+

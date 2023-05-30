@@ -1,20 +1,35 @@
 <!-- templates/base.html -->
 {% load static %}
-<!-- check whether the user is authenticated or not -->
-{% if user.is_authenticated %}
-    <p> Welcome, {{ user.username }}!</p>
-    <a href="{% url 'logout_user' %}">Logout</a>
-{% else %}
-    <a href="{% url 'login_user' %}">Login</a>
-    <a href="{% url 'register_user' %}">Register</a>
-{% endif %}
-    <div class="message">
+<html>
+    <head>
+        <title>Make your choice</title>
+        <!-- load base.css -->
+        <link rel="stylesheet" href="{% static 'base.css' %}">
+    </head>
+    <body>
+        <div class="navbar">
+            <a href="{% url 'index' %}">Home</a>
+            {% if user.is_authenticated %}
+                <p class="welcome"> Welcome, {{ user.username }}!</p>
+                <a href="{% url 'logout_user' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login_user' %}">Login</a>
+                <a href="{% url 'register_user' %}">Register</a>
+            {% endif %}
+        </div>
         {% if messages %}
+            <div class="message">
             {% for message in messages %}
-                <p>{{ message }}</p>
+                {% if message.tags == 'error' %}
+                    <a style="color: red">{{ message }}</a>
+                {% else %}
+                    <a style="color: green">{{ message }}</a>
+                {% endif %}
             {% endfor %}
+            </div>
         {% endif %}
-    </div>
 {% block content %}
 {% endblock %}
+    </body>
+</html>
 

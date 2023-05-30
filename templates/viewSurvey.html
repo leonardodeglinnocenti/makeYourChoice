@@ -2,12 +2,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <ul>
+    <h2>Survey: "{{ survey.name }}"</h2>
+    <h3>By: {{ survey.user }}</h3>
+
+    <a href="{% url 'editSurvey' survey.id %}">
+        <button class="edit" type="button">Edit survey parameters</button>
+    </a>
+
+    <ul class="card">
         {% for question in questions %}
             <li>
-                <h3>{{ question.text }}</h3>
+                <h2>{{ question.text }}</h2>
                 <!-- Show all choices related to a question -->
-                <ul>
+                <ul class="inner-card">
                     {% for choice in question.choice_set.all %}
                         <li>
                             {{ choice.text }}
@@ -31,7 +38,7 @@
     <!-- Add link to add a question to this survey -->
     <!-- Solved thanks to context data -->
     <a href="{% url 'addQuestion' survey.get_id%}">
-        <button class="delete" type="button">Add question</button>
+        <button class="new" type="button">Add question</button>
     </a>
     <a href="{% url 'index' %}">
         <button class="home" type="button">Back to surveys</button>

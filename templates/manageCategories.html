@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <ul>
+    <ul class="card">
         {% for category in categories %}
             <li>
-                <b>{{ category.name }} </b> Created by: {{ category.user }}
+                <h2> {{ category.name }} </h2>
+                <br>
+                Created by: {{ category.user }}
                 <!-- Show all choices related to a question -->
                 {% if category.user == user or user.is_staff %}
                     <a href="{% url 'deleteCategory' category.id %}">
