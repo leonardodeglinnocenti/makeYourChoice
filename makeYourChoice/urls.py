@@ -39,4 +39,5 @@ urlpatterns = [
     # make path to call subscribe_to_category function
     path('subscribeToCategory/<int:pk>/', views.subscribe_to_category, name='subscribeToCategory'),
     path('unsubscribeFromCategory/<int:pk>/', views.unsubscribe_from_category, name='unsubscribeFromCategory'),
+    path('manageSurveys/', views.ManageSurveys.as_view(), name='manageSurveys'),
 ]

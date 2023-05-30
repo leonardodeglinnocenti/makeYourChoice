@@ -212,9 +212,9 @@ class ViewResponses(ListView):
     template_name = 'viewResponses.html'
     context_object_name = 'answers_responses'
 
-    def get_context_data(self, *, object_list=User, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['answer'] = Answer.objects.get(pk=self.kwargs['pk'])
+        context['survey'] = Survey.objects.get(pk=self.kwargs['pk'])
         return context
 
     def get_queryset(self):
@@ -229,7 +229,7 @@ class CreateCategory(CreateView):
     template_name = 'createCategory.html'
 
     def get_success_url(self):
-        return reverse_lazy('index')
+        return reverse_lazy('manageCategories')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -241,7 +241,7 @@ class DeleteCategory(DeleteView):
     template_name = 'deleteCategory.html'
 
     def get_success_url(self):
-        return reverse_lazy('index')
+        return reverse_lazy('manageCategories')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -254,7 +254,7 @@ class DeleteCategory(DeleteView):
             return super().form_valid(form)
         else:
             messages.success(self.request, "You are not the owner of this category, so you cannot delete it")
-            return HttpResponseRedirect(reverse_lazy('index'))
+            return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
 class ManageCategories(ListView):
@@ -301,3 +301,14 @@ def unsubscribe_from_category(request, pk):
         return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
+# create a class that allows the user to edit their surveys
+class ManageSurveys(ListView):
+    model = Survey
+    template_name = 'manageSurveys.html'
+    context_object_name = 'surveys'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get all surveys that the user owns
+        context['owned_surveys'] = Survey.objects.filter(user=self.request.user)
+        return context

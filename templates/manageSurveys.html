@@ -1,0 +1,28 @@
+<!-- -->
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Manage your surveys!</h1>
+
+<ul>
+{% for survey in owned_surveys %}
+    <li> {{ survey.name }} : {{ survey.description }} : {{ survey.category }}
+        <a href="{% url 'viewSurvey' survey.id %}">
+            <button class="open" type="button">Open</button>
+        </a>
+        <a href="{% url 'viewResponses' survey.id %}">
+            <button  class="edit" type="button">Results</button>
+        </a>
+        <a href="{% url 'deleteSurvey' survey.id %}">
+            <button class="delete" type="button">Delete</button>
+        </a>
+    </li>
+{% endfor %}
+</ul>
+
+    <a href="{% url 'index' %}">
+        <button class="home" type="button">Back to surveys</button>
+    </a>
+
+
+{% endblock %}

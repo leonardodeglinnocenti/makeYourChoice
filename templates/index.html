@@ -20,7 +20,7 @@
                     <!-- Put a tick if the user has already taken the survey -->
                     {% for response in responses %}
                         {% if response.user == user and response.survey.id == survey.id %}
-                            &#10004;
+                            &#10004; <!-- tick -->
                         {% endif %}
                     {% endfor %}
                     <a href="{% url 'takeSurvey' survey.id %}">
@@ -60,9 +60,8 @@
         <a href="{% url 'createSurvey' %}">
             <button class="new" type="button">Create a new survey</button>
         </a>
-        <!-- Create a Django button to create a new category -->
-        <a href="{% url 'createCategory' %}">
-            <button class="new" type="button">Create a new category</button>
+        <a href="{% url 'manageSurveys' %}">
+            <button class="new" type="button">Manage surveys</button>
         </a>
         <a href="{% url 'manageCategories' %}">
             <button class="new" type="button">Manage categories</button>
