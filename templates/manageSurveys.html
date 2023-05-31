@@ -6,7 +6,12 @@
 
 <ul class="card">
 {% for survey in owned_surveys %}
-    <li> {{ survey.name }} : {{ survey.description }} : {{ survey.category }}
+    <li>
+        <h2>{{ survey.name }} </h2>
+        Category: <b>{{ survey.category }}</b> <br>
+        Created by: <b>{{ survey.user }}</b> <br>
+        Deadline: <b>{{ survey.deadline }}</b> <br>
+        Description: <b>{{ survey.description }}</b>
         <a href="{% url 'viewSurvey' survey.id %}">
             <button class="edit" type="button">Edit</button>
         </a>

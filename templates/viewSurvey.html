@@ -2,8 +2,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Survey: "{{ survey.name }}"</h2>
-    <h3>By: {{ survey.user }}</h3>
+    <h2>{{ survey.name }} </h2>
+    Category: <b>{{ survey.category }}</b> <br>
+    Created by: <b>{{ survey.user }}</b> <br>
+    Deadline: <b>{{ survey.deadline }}</b> <br>
+    Description: <b>{{ survey.description }}</b>
+    <br>
 
     <a href="{% url 'editSurvey' survey.id %}">
         <button class="edit" type="button">Edit survey parameters</button>
