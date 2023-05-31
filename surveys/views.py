@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+
+from users.models import UserFollows
 from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
 from .forms import AnswerForm
 
@@ -22,6 +24,8 @@ class ViewSurveys(ListView):
         # check whether a user is authenticated
         if self.request.user.is_authenticated:
             context['subscribed_surveys'] = Survey.objects.filter(category__in=UserCategorySubscription.objects.filter(user=self.request.user).values_list('category', flat=True))
+            # get all the surveys made by the users the current user is following
+            context['followed_users_surveys'] = Survey.objects.filter(user__in=User.objects.filter(pk__in=UserFollows.objects.filter(user=self.request.user).values_list('followed_user', flat=True)))
         return context
 
     def get_queryset(self):
@@ -343,4 +347,5 @@ class ManageSurveys(ListView):
         # get all surveys that the user owns
         context['owned_surveys'] = Survey.objects.filter(user=self.request.user)
         return context
+
 

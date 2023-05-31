@@ -1,6 +1,6 @@
 <!-- templates/base.html -->
 {% load static %}
-<html>
+<html lang="en">
     <head>
         <title>Make your choice</title>
         <!-- load base.css -->
@@ -11,6 +11,8 @@
             <a href="{% url 'index' %}">Home</a>
             {% if user.is_authenticated %}
                 <p class="welcome"> Welcome, {{ user.username }}!</p>
+                <a href="{% url 'search_user' %}">Search user</a>
+                <a href="{% url 'manage_followed_users' %}">Followed users</a>
                 <a href="{% url 'logout_user' %}">Logout</a>
             {% else %}
                 <a href="{% url 'login_user' %}">Login</a>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1> Manage followed users </h1>
+    <br>
+
+    {% csrf_token %}
+
+    {% if followed_users %}
+        <h3> You are following {{ followed_users|length }} users </h3>
+    {% else %}
+        <h3> You are not following any users </h3>
+    {% endif %}
+
+    <!-- get followed_users and display them -->
+    <ul class="card">
+    {% for user in followed_users %}
+        <li>
+            {{ user.followed_user.username }}
+            <a href="{% url 'unfollow_user' user.followed_user.id %}">Unfollow</a>
+        </li>
+
+        <br>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'search_user' %}">
+        <button class="new" type="button">Add new users</button>
+    </a>
+
+{% endblock %}
