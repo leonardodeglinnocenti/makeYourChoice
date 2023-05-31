@@ -4,16 +4,18 @@
     <head>
         <title>Make your choice</title>
         <!-- load base.css -->
+        <script src="/templates/animate-menu.js" defer></script>
         <link rel="stylesheet" href="{% static 'base.css' %}">
     </head>
     <body>
-        <div class="navbar">
+        <div class="navbar" id="navbar">
+            <button class="menu-button" id="menu-button">Menu</button>
             <a href="{% url 'index' %}">Home</a>
             {% if user.is_authenticated %}
-                <p class="welcome"> Welcome, {{ user.username }}!</p>
                 <a href="{% url 'search_user' %}">Search user</a>
                 <a href="{% url 'manage_followed_users' %}">Followed users</a>
                 <a href="{% url 'logout_user' %}">Logout</a>
+                <p class="welcome"> Welcome, {{ user.username }}!</p>
             {% else %}
                 <a href="{% url 'login_user' %}">Login</a>
                 <a href="{% url 'register_user' %}">Register</a>

@@ -4,18 +4,28 @@
 
     <h1>Responses</h1>
 
+    <!-- Show the most selected choice for each question -->
+    <!-- TODO: Show the most selected choice for each question -->
+
     <!-- Show all questions and answers related to a response -->
 
+    <ul class="card">
     {% for answer in answers_responses %}
         {% ifchanged answer.response.id %}
-            <h4> {{ answer.response.id }}: {{ answer.response.user }}</h4>
+            <br>
+            User: {{ answer.response.user }} &emsp;
+            Response id: {{ answer.response.id }} <br>
+            <br>
         {% endifchanged %}
-        <b> {{ answer.answer.question.text }} </b> ==>
-        &emsp;
-        {{ answer.answer.choice.text }}
-        <br>
+
+        <li>
+            <b> {{ answer.answer.question.text }} </b> ==>
+            {{ answer.answer.choice.text }}
+        </li>
     {% endfor %}
+    </ul>
     <br>
+
 
     <a href="{% url 'index' %}">
         <button class="home" type="button">Back to surveys</button>

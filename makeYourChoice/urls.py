@@ -41,4 +41,5 @@ urlpatterns = [
     path('unsubscribeFromCategory/<int:pk>/', views.unsubscribe_from_category, name='unsubscribeFromCategory'),
     path('manageSurveys/', views.ManageSurveys.as_view(), name='manageSurveys'),
     path('editSurvey/<int:pk>/', views.EditSurvey.as_view(), name='editSurvey'),
+    path('deleteResponse/<int:pk>/', views.DeleteResponse.as_view(), name='deleteResponse'),
 ]

@@ -4,6 +4,10 @@
 
 <h1>Manage your surveys!</h1>
 
+    {% if owned_surveys|length == 0 %}
+        <p style="color: darkorange">You haven't created any surveys yet!</p>
+    {% endif %}
+
 <ul class="card">
 {% for survey in owned_surveys %}
     <li>

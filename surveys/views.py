@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -8,6 +8,10 @@ from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from users.models import UserFollows
 from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
 from .forms import AnswerForm
+
+from django import template
+register = template.Library()
+
 
 # Create your views here.
 
@@ -106,7 +110,7 @@ class EditSurvey(UpdateView):
 
 class AddQuestion(CreateView):
     model = Question
-    fields = ['text', 'is_open']
+    fields = ['text']
     template_name = 'addQuestion.html'
 
     def get_success_url(self):
@@ -242,6 +246,29 @@ class TakeSurvey(ListView):
         return reverse_lazy('index')
 
 
+class DeleteResponse(DeleteView):
+    model = Response
+    template_name = 'deleteResponse.html'
+    context_object_name = 'response'
+
+    # delete the response made to the survey by the current user
+    def get_success_url(self):
+        return reverse_lazy('index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['responses'] = Response.objects.get(pk=self.object.id)
+        return context
+
+    def form_valid(self, form):
+        if self.request.user == Response.objects.get(pk=self.kwargs['pk']).user or self.request.user.is_staff:
+            messages.success(self.request, "Response deleted successfully")
+            return super().form_valid(form)
+        else:
+            messages.error(self.request, "You are not the owner of this response, so you cannot delete it")
+            return HttpResponseRedirect(reverse_lazy('index'))
+
+
 class ViewResponses(ListView):
     model = AnswerResponse
     template_name = 'viewResponses.html'
@@ -250,12 +277,11 @@ class ViewResponses(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['survey'] = Survey.objects.get(pk=self.kwargs['pk'])
+        context['questions'] = Question.objects.filter(survey_id=self.kwargs['pk'])
         return context
 
     def get_queryset(self):
         return AnswerResponse.objects.filter(response__survey_id=self.kwargs['pk'])
-
-    # Make this object not accessible to users who are not the owner of the survey or are not staff members
 
 
 class CreateCategory(CreateView):
@@ -347,5 +373,4 @@ class ManageSurveys(ListView):
         # get all surveys that the user owns
         context['owned_surveys'] = Survey.objects.filter(user=self.request.user)
         return context
-
 

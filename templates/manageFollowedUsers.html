@@ -17,7 +17,9 @@
     {% for user in followed_users %}
         <li>
             {{ user.followed_user.username }}
-            <a href="{% url 'unfollow_user' user.followed_user.id %}">Unfollow</a>
+            <a href="{% url 'unfollow_user' user.followed_user.id %}">
+                <button class="unsubscribe">Unfollow</button>
+            </a>
         </li>
 
         <br>

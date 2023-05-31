@@ -20,7 +20,9 @@
         {% for user in users %}
             <li>
                 {{ user.username }}
-                <a href="{% url 'follow_user' user.id %}">Follow</a>
+                <a href="{% url 'follow_user' user.id %}">
+                    <button class="subscribe"> Follow </button>
+                </a>
             </li>
         {% endfor %}
     </ul>

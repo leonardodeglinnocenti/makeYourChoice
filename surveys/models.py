@@ -40,7 +40,6 @@ class Survey(models.Model):
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
     text = models.CharField(max_length=200)
-    is_open = models.BooleanField(default=False)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
 
     def __str__(self):
