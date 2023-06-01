@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,13 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bvvgys435^o+@s0bt27y=22*7i%e3ygy9hu4f13m(bk@%bz@dn'
+# SECRET_KEY = 'django-insecure-bvvgys435^o+@s0bt27y=22*7i%e3ygy9hu4f13m(bk@%bz@dn'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["djangorailway-production.up.railway.app", "127.0.01", "localhost", ]
 
+CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app', ]
 
 # Application definition
 
@@ -128,3 +131,8 @@ STATICFILES_DIRS = [BASE_DIR / 'templates/', ]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Deployment settings
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
