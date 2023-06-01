@@ -30,7 +30,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app', ]
+# CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app', ]
 
 # Application definition
 
@@ -125,9 +125,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
 
-STATICFILES_DIRS = [BASE_DIR / 'templates/', ]
+STATICFILES_DIRS = [BASE_DIR.joinpath('static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
