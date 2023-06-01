@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-# import dj_database_url
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,11 +26,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+ALLOWED_HOSTS = ["djangorailway-production.up.railway.app", "127.0.0.1", "localhost"]
 
-ALLOWED_HOSTS = ['*']
-
-# CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app', ]
+CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app']
 
 # Application definition
 
@@ -47,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,7 +124,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [BASE_DIR / 'templates/', ]
 
@@ -134,10 +134,13 @@ STATICFILES_DIRS = [BASE_DIR / 'templates/', ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Deployment settings
-# SECURE_SSL_REDIRECT = True
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Database
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
