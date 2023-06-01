@@ -1,0 +1,17 @@
+<!-- Make Django HTML form for the user to add a question to a Survey -->
+
+
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Add a new question</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Add question</button>
+        <!-- create a button to cancel the Django form -->
+        <a href="{% url 'viewSurvey' survey.get_id %}">
+            <button class="cancel-link" type="button">Cancel</button>
+        </a>
+    </form>
+
+{% endblock content %}

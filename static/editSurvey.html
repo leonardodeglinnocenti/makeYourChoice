@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Edit your survey!</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ survey.name }}">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" value="{{ survey.description }}">
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            {% for category in categories %}
+                {% if category.id == survey.category.id %}
+                    <option value="{{ category.id }}" id="info" selected>{{ category.name }}</option>
+                {% else %}
+                    <option value="{{ category.id }}" id="info">{{ category.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <label for="deadline">Due Date:</label>
+        <input type="date" id="deadline" name="deadline" value="{{ survey.deadline.isoformat }}">
+        <!-- If form is not valid, display error message and show with a popup where the error is-->
+        {% if form.errors %}
+            {% if form.deadline.errors %}
+                <p style="color: red">Please select a valid date.</p>
+            {% endif %}
+        {% endif %}
+        <br>
+        <!-- Create a calendar widget for the date field -->
+        <input type="submit" value="Submit">
+        <a href="{% url 'viewSurvey' survey.id %}">
+            <button class="cancel-link" type="button">Back to edit</button>
+        </a>
+    </form>
+
+
+{% endblock %}

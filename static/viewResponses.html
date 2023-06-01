@@ -1,0 +1,55 @@
+<!-- Create a Django HTML page that shows all the questions and answers related to a response given through the link -->
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Responses</h1>
+
+    <!-- Show the most selected choice for each question -->
+    <!-- TODO: Show the most selected choice for each question -->
+
+    <!-- Show all questions and answers related to a response -->
+
+    <ul>
+    {% for question in questions %}
+        <b>Question: {{ question.text }} </b>
+        {% for choice in choices %}
+            {% if question.id == choice.question.id %}
+                <li>
+                    {{ choice.text }} &emsp;
+                    {{ choice.number_of_votes }} votes
+                </li>
+            {% endif %}
+        {% endfor %}
+        <br>
+    {% endfor %}
+    </ul>
+
+    <h2>User responses:</h2>
+
+    <ul class="card">
+    {% for answer in answers_responses %}
+        {% ifchanged answer.response.id %}
+            <br>
+            <b>
+                User: {{ answer.response.user }} &emsp;
+                Response id: {{ answer.response.id }}
+            </b>
+            <br>
+            <br>
+        {% endifchanged %}
+
+        <li>
+            <b> {{ answer.answer.question.text }} </b> ==>
+            {{ answer.answer.choice.text }}
+        </li>
+    {% endfor %}
+    </ul>
+    <br>
+
+
+    <a href="{% url 'index' %}">
+        <button class="home" type="button">Back to surveys</button>
+    </a>
+
+{% endblock %}
+
