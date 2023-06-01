@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ["djangorailway-production.up.railway.app", "127.0.0.1", "localhost", ]
+ALLOWED_HOSTS = ["web-production-de9e.up.railway.app", "127.0.0.1", "localhost", ]
 
 CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app', ]
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'surveys',
     'users',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
