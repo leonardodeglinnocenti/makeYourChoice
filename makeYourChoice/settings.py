@@ -22,15 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-bvvgys435^o+@s0bt27y=22*7i%e3ygy9hu4f13m(bk@%bz@dn'
-SECRET_KEY = os.environ.get('SECRET_KEY',)
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"  # new
 
-ALLOWED_HOSTS = ["djangorailway-production.up.railway.app", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["djangorailway-production.up.railway.app", "127.0.0.1", "localhost", "web-production-de9e.up.railway.app"]
 
-CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app', 'http://127.0.0.1', 'https://web-production-de9e.up.railway.app']
 
 
 # Application definition
