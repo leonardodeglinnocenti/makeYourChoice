@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Add a new choice</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Add choice</button>
+        <a href="{% url 'viewSurvey' survey.get_id %}">
+            <button class="cancel-link" type="button">Cancel</button>
+        </a>
+    </form>
+{% endblock content %}

@@ -1,0 +1,46 @@
+<!-- Create a Django HTML page to create a Survey object (as described in models.py -->
+
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Create your survey!</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        {{ form.name }}
+        <label for="description">Description:</label>
+        {{ form.description }}
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            <!-- If there are no categories, display error message -->
+            {% if categories|length == 0 %}
+                <option value="" id="error" selected disabled>---- There are no categories available! Please add one first. ----</option>
+            {% else %}
+                <option value="" id="info" selected disabled>---- Choose category here ----</option>
+            {% endif %}
+            {% if form.category.errors %}
+                <option value="" id="info" selected disabled>---- You have to choose a category here! ----</option>
+            {% endif %}
+            {% for category in categories %}
+                <option value="{{ category.id }}" id="info">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="deadline">Due Date:</label>
+        <input type="date" id="deadline" name="deadline">
+        <!-- If form is not valid, display error message and show with a popup where the error is-->
+        {% if form.errors %}
+            {% if form.deadline.errors %}
+                <p style="color: red">Please select a valid date.</p>
+            {% endif %}
+        {% endif %}
+        <br>
+        <!-- Create a calendar widget for the date field -->
+        <input type="submit" value="Submit">
+        <a href="{% url 'index' %}">
+            <button class="cancel-link" type="button">Cancel</button>
+        </a>
+    </form>
+
+
+{% endblock %}
+
