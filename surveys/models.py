@@ -56,6 +56,7 @@ class Choice(models.Model):
     id = models.AutoField(primary_key=True)
     text = models.CharField(max_length=200)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    number_of_votes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.text

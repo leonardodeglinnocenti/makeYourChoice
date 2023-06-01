@@ -230,6 +230,10 @@ class TakeSurvey(ListView):
                 for question in Question.objects.filter(survey_id=self.kwargs['pk']):
                     answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id)
                     AnswerResponse.objects.create(answer_id=answer.id, response_id=response.id)
+                    # Update the number of responses for each choice
+                    choice = Choice.objects.get(pk=form.cleaned_data[question.text].id)
+                    choice.number_of_votes = choice.number_of_votes + 1
+                    choice.save()
                 messages.success(request, 'Survey completed successfully')
                 return HttpResponseRedirect(reverse_lazy('index'))
             else:
@@ -261,8 +265,20 @@ class DeleteResponse(DeleteView):
         return context
 
     def form_valid(self, form):
-        if self.request.user == Response.objects.get(pk=self.kwargs['pk']).user or self.request.user.is_staff:
+        if self.request.user == Response.objects.get(pk=self.object.id).user or self.request.user.is_staff:
             messages.success(self.request, "Response deleted successfully")
+            user = self.request.user
+            response = Response.objects.get(pk=self.kwargs['pk'])
+            for question in AnswerResponse.objects.filter(response_id=response.id):
+                # Update the number of responses for each choice
+                choice = Choice.objects.get(pk=question.answer.choice_id)
+                choice.number_of_votes = choice.number_of_votes - 1
+                choice.save()
+            collector = AnswerResponse.objects.filter(response_id=response.id).all()
+            for answer in collector:
+                answer.delete()
+            AnswerResponse.objects.filter(response_id=response.id).all().delete()
+            response.delete()
             return super().form_valid(form)
         else:
             messages.error(self.request, "You are not the owner of this response, so you cannot delete it")
@@ -278,6 +294,8 @@ class ViewResponses(ListView):
         context = super().get_context_data(**kwargs)
         context['survey'] = Survey.objects.get(pk=self.kwargs['pk'])
         context['questions'] = Question.objects.filter(survey_id=self.kwargs['pk'])
+        context['answers'] = Answer.objects.filter(question__survey_id=self.kwargs['pk'])
+        context['choices'] = Choice.objects.all()
         return context
 
     def get_queryset(self):
