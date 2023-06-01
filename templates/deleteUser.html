@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 style="color: red">Are you sure you want to delete your account?</h1>
+<h2 style="color: red"> Note that all your surveys will be deleted! </h2>
+
+    <a href="{% url 'delete_user' user.id %}">
+            <button class="delete" type="button">Yes, I'm sure</button>
+    </a>
+
+    <a href="{% url 'index' %}">
+            <button class="cancel-link" type="button">Cancel</button>
+    </a>
+
+{% endblock %}

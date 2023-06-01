@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 
 from users.models import UserFollows
 
@@ -95,3 +95,27 @@ def unfollow_user(request, pk):
 
 def is_following(user, followed_user):
     return UserFollows.objects.filter(user=user, followed_user=followed_user).exists()
+
+
+class DeleteUser(ListView):
+    model = User
+    template_name = 'deleteUser.html'
+
+    def get_queryset(self):
+        return User.objects.filter(pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = User.objects.get(pk=self.request.user.pk)
+        return context
+
+
+def delete_user(request, pk):
+    user = User.objects.get(pk=pk)
+    if user.delete():
+        messages.success(request, "You have successfully deleted " + user.username)
+        return redirect('login_user')
+    else:
+        messages.error(request, "Something went wrong, you have not deleted the user")
+        return render(request, "deleteUser.html")
+

@@ -9,5 +9,7 @@ urlpatterns = [
     path('manage_followed_users', views.ManageFollowedUsers.as_view(), name='manage_followed_users'),
     path('follow_user/<int:pk>', views.follow_user, name='follow_user'),
     path('unfollow_user/<int:pk>/', views.unfollow_user, name='unfollow_user'),
-    path('is_following/<int:pk>/', views.is_following, name='is_following')
+    path('is_following/<int:pk>/', views.is_following, name='is_following'),
+    path('deleteUser', views.DeleteUser.as_view(), name='deleteUser'),
+    path('delete_user/<int:pk>/', views.delete_user, name='delete_user'),
 ]
