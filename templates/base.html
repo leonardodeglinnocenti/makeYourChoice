@@ -22,7 +22,7 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'search_user' %}">Search user</a>
                 <a href="{% url 'manage_followed_users' %}">Followed users</a>
-                <a href="{% url 'instructions' %}">How to use</a>
+                <a href="{% url 'instructions' %}"><mark>How to use</mark></a>
                 <a href="{% url 'deleteUser' %}">Delete account</a>
                 <a href="{% url 'logout_user' %}">Logout</a>
             {% else %}

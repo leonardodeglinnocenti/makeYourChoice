@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import ListView, View
+from django.views.generic import ListView
 
 from users.models import UserFollows
 
@@ -55,7 +55,9 @@ def search_user(request):
     if request.method == "POST":
         search_text = request.POST['search_text']
         users = User.objects.filter(username__contains=search_text)
-        return render(request, 'searchUser.html', {'users': users})
+        # get the users that the current user is following with the UserFollows model, selecting only the followed_user
+        followed_users = UserFollows.objects.filter(user=request.user).values_list('followed_user', flat=True)
+        return render(request, 'searchUser.html', {'users': users, 'followed_users': followed_users})
     else:
         return render(request, 'searchUser.html')
 

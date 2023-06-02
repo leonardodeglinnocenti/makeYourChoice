@@ -6,14 +6,39 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Instructions</h1>
-                <p>1. Click on the "Create a new survey" button to create a new survey. Remember that you need to create the category first (if it's not already present).</p>
-                <p>2. Click on the "Manage surveys" button to manage your surveys.</p>
-                <p>3. Click on the "Manage categories" button to manage your categories.</p>
 
-                <h1>Security measures</h1>
-                <p>1. You cannot force an action by trying to access a page that you are not allowed to access. For example, if you are not logged in or you aren't the owner of a survey, you cannot access the "Delete Survey" page, by passing the survey as a parameter in the browser url bar.</p>
-                <p>2. The Secret Key is passed as an environment variable, so it's not visible in the code source.</p>
+                <h2>Take surveys</h2>
+                <p>1. Before you can take a survey, you need to <mark><b>subscribe to a category of interest</b></mark> or <mark><b>follow a user</b></mark>. To do that, you can press the <i><b>Subscribe</b></i> button in the main page or in the <i><b>Manage categories</b></i> page to see the list of categories that you can subscribe to. You can also press the <i><b>Search</b></i> button in the <i><b>Search user</b></i> page to see the list of users that you can follow. Then you can press the <i><b>Follow</b></i> button to follow a user.</p>
+                <p>2. To take a survey, you can press the <i><b>Take</b></i> button in the main page or in the <i><b>Manage surveys</b></i> page to see the list of surveys that you have created.</p>
+
+                <h2>Create surveys</h2>
+                <p>1. Register or login to the website.</p>
+                <p>2. To create a new survey it's necessary to verify whether the category already exists or not. If it doesn't exist, you can create it by pressing <i><b>Manage categories</b></i>. If it exists, you can select it from a list during the creation of the survey.</p>
+                <p>3. After creating a survey, you can add questions to it by pressing <i><b>Add Questions</b></i>.</p>
+                <p>4. After adding questions, you can add choices to each question by pressing <i><b>Add Choices</b></i>.</p>
+
+                <h2>Manage surveys</h2>
+                <p>1. To manage surveys, you can press the <i><b>Manage surveys</b></i> page to see the list of surveys that you have created.</p>
+                <p>2. In the <i><b>Manage surveys</b></i> page, you can delete a survey by pressing the <i><b>Delete</b></i> button, or you can see the results of a survey by pressing the <i><b>Results</b></i> button.</p>
+
+                <h2>Manage categories</h2>
+                <p>1. To manage categories, you can press the <i><b>Manage categories</b></i> page to see the list of categories that you have created.</p>
+                <p>2. In the <i><b>Manage categories</b></i> page, you can delete a category by pressing the <i><b>Delete</b></i> button. Note that you can only delete a category only if you have created it.</p>
+                <p>3. In the <i><b>Manage categories</b></i> page, you can create a category by pressing the <i><b>Create a new category</b></i> button.</p>
+
+                <h2>Search user</h2>
+                <p>1. To search a user, you can press the <i><b>Search user</b></i> page. If you want to list all the users, you can press the <i><b>Search</b></i> button without entering any username.</p>
+                <p>2. You can follow a user by pressing the <i><b>Follow</b></i> button.</p>
+                <p>3. You can see the list of users that you are following by pressing the <i><b>Followed users</b></i> button. To unfollow a user, you can press the <i><b>Unfollow</b></i> button.</p>
+
+                <h1 style="color: #a41515">Security measures</h1>
+                <p>1. You cannot force an action by trying to access a page that you are not allowed to access. For example, if you are not logged in and/or you aren't the owner of a survey, you cannot delete it by accessing the "Delete Survey" page and passing the survey id as a parameter in the browser url bar.</p>
+                <p>2. The Secret Key is passed as an environment variable, so it's not visible in the source code.</p>
                 <p>3. Before a critical action is performed, a confirmation message is displayed to the user.</p>
+                <p>4. When a survey is deleted, all the related questions and choices are deleted as well.</p>
+                <p>5. When a category is deleted, all the related surveys are deleted as well.</p>
+                <p>6. When a user is deleted, all the related surveys are deleted as well.</p>
+                <p>7. When a user is deleted, all the related subscriptions are deleted as well.</p>
 
             </div>
         </div>

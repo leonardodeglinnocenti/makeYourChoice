@@ -20,9 +20,15 @@
         {% for user in users %}
             <li>
                 {{ user.username }}
-                <a href="{% url 'follow_user' user.id %}">
-                    <button class="subscribe"> Follow </button>
-                </a>
+                {% if user.id not in followed_users %}
+                    <a href="{% url 'follow_user' user.id %}">
+                        <button class="subscribe"> Follow </button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'unfollow_user' user.id %}">
+                        <button class="unsubscribe"> Unfollow </button>
+                    </a>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
