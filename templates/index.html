@@ -96,7 +96,7 @@
                         {% endif %}
                     {% endfor %}
                     <a href="{% url 'takeSurvey' survey.id %}">
-                        <button class="open" type="button">Take</button>
+                        <button class="take" type="button">Take</button>
                     </a>
                     {% if user.is_staff %}
                         <a href="{% url 'viewSurvey' survey.id %}">
