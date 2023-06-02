@@ -9,24 +9,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <button class="menu-button" id="menu-button" onclick="toggleMobileNavbar()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+            </svg>  Menu
+        </button>
         <div class="navbar" id="navbar">
-            <button class="menu-button" id="menu-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
-                </svg>
-            </button>
+            {% if user.is_authenticated %}
+                <div class="mobile-welcome"> Welcome, {{ user.username }}!</div>
+            {% endif %}
             <a href="{% url 'index' %}">Home</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'search_user' %}">Search user</a>
                 <a href="{% url 'manage_followed_users' %}">Followed users</a>
+                <a href="{% url 'instructions' %}">How to use</a>
                 <a href="{% url 'deleteUser' %}">Delete account</a>
                 <a href="{% url 'logout_user' %}">Logout</a>
-                <p class="welcome"> Welcome, {{ user.username }}!</p>
             {% else %}
+                <a href="{% url 'instructions' %}">How to use</a>
                 <a href="{% url 'login_user' %}">Login</a>
                 <a href="{% url 'register_user' %}">Register</a>
             {% endif %}
         </div>
+        {% if user.is_authenticated %}
+            <div class="welcome"> Welcome, {{ user.username }}!</div>
+        {% endif %}
         {% if messages %}
             <div class="message">
             {% for message in messages %}
@@ -38,6 +45,7 @@
             {% endfor %}
             </div>
         {% endif %}
+        <div class="mobile-spacer" id="mobile-spacer"> <br> <br> </div>
 {% block content %}
 {% endblock %}
     </body>

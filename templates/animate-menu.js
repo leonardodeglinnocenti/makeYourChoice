@@ -1,7 +1,7 @@
-// When .menu-button is tapped, make navbar visible
+// When menu-button is tapped, toggle visibility of the nav menu
+// and animate the menu-button icon
 
-$(document).ready(function() {
-    $(".menu-button").click(function() {
-        $(".navbar").toggleClass("hide");
-    });
-});
+function toggleMobileNavbar() {
+    document.getElementById('navbar').classList.toggle('show');
+    document.getElementById('mobile-spacer').classList.toggle('mobile-spacer-hide')
+}

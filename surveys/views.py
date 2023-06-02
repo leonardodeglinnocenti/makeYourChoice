@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView, View
 
 from users.models import UserFollows
 from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
@@ -391,4 +391,9 @@ class ManageSurveys(ListView):
         # get all surveys that the user owns
         context['owned_surveys'] = Survey.objects.filter(user=self.request.user)
         return context
+
+
+class Instructions(View):
+    def get(self, request):
+        return render(request, 'instructions.html')
 

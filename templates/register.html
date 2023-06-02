@@ -3,6 +3,11 @@
 <h1>Register</h1>
 <form method="post">
     {% csrf_token %}
+    {% if form.errors %}
+        <div class="message" style="color: red">
+            {{ form.errors }}
+        </div>
+    {% endif %}
     {{ form.as_p }}
     <button type="submit">Register</button>
 </form>
