@@ -52,14 +52,14 @@ button {
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  padding: 5px 10px;
+  padding: 9px 15px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   margin: 10px;
   cursor: pointer;
-  border-radius: 9px;
+  border-radius: 3px;
 }
 
 /* Make buttons look like the ones in Material Design when you hover over them */
@@ -127,6 +127,17 @@ button.submit {
 
 /* Make the input field look like the ones in Material Design */
 input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=password], select, textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -259,10 +270,6 @@ option {
   display: none;
 }
 
-.hideMobileNavbar {
-  display: none;
-}
-
 /* Make survey look like the ones in Material Design */
 .survey {
   border-radius: 5px;
@@ -274,21 +281,18 @@ option {
 /* add breakpoint for small screens */
 @media screen and (max-width: 750px) {
 
-    .menu-button {
-        display: block;
-        margin: auto;
-        background-color: #333;
-        color: white;
-        padding: 10px;
-        border: none;
-        cursor: pointer;
-    }
+
     /* Make the navbar look organised in small screens */
     .navbar {
       display: block;
-        overflow: hidden;
-        background-color: #333;
+      overflow: hidden;
+      background-color: #333;
     }
+
+    .navbar.hide {
+      display: none;
+    }
+
     /* Make the links inside the navbar look organised in small screens */
     .navbar a {
         float: none;
