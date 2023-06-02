@@ -23,13 +23,14 @@ class ViewSurveys(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['responses'] = Response.objects.all()
         # get all the surveys related to the categories the user is subscribed to
         # check whether a user is authenticated
         if self.request.user.is_authenticated:
+            context['responses'] = Response.objects.filter(user=self.request.user)
             context['subscribed_surveys'] = Survey.objects.filter(category__in=UserCategorySubscription.objects.filter(user=self.request.user).values_list('category', flat=True))
             # get all the surveys made by the users the current user is following
             context['followed_users_surveys'] = Survey.objects.filter(user__in=User.objects.filter(pk__in=UserFollows.objects.filter(user=self.request.user).values_list('followed_user', flat=True)))
+            context['taken_surveys'] = Survey.objects.filter(response__in=Response.objects.filter(user=self.request.user))
         return context
 
     def get_queryset(self):

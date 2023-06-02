@@ -40,7 +40,7 @@
                     <!-- Put a tick if the user has already taken the survey -->
                     <br>
                     {% for response in responses %}
-                        {% if response.user == user and response.survey.id == survey.id %}
+                        {% if response.survey.id == survey.id %}
                             <p class="taken"> &#10004; You already answered to this survey
                                 <br>
                                 <a href="{% url 'deleteResponse' response.id %}">
@@ -50,9 +50,11 @@
                             <br> <br>
                         {% endif %}
                     {% endfor %}
-                    <a href="{% url 'takeSurvey' survey.id %}">
-                        <button class="take" type="button">Take</button>
-                    </a>
+                    {% if survey not in taken_surveys %}
+                        <a href="{% url 'takeSurvey' survey.id %}">
+                            <button class="take" type="button">Take</button>
+                        </a>
+                    {% endif %}
                     {% if user.is_staff or survey.user == user %}
                         <a href="{% url 'viewSurvey' survey.id %}">
                             <button class="edit" type="button">Edit</button>
@@ -84,8 +86,9 @@
                         Deadline: <b>{{ survey.deadline }}</b> <br>
                         Description: <b>{{ survey.description }}</b>
                     <!-- Put a tick if the user has already taken the survey -->
+                    <br>
                     {% for response in responses %}
-                        {% if response.user == user and response.survey.id == survey.id %}
+                        {% if response.survey.id == survey.id %}
                             <p class="taken"> &#10004; You already answered to this survey
                                 <br>
                                 <a href="{% url 'deleteResponse' response.id %}">
@@ -95,9 +98,11 @@
                             <br> <br>
                         {% endif %}
                     {% endfor %}
-                    <a href="{% url 'takeSurvey' survey.id %}">
-                        <button class="take" type="button">Take</button>
-                    </a>
+                    {% if survey not in taken_surveys %}
+                        <a href="{% url 'takeSurvey' survey.id %}">
+                            <button class="take" type="button">Take</button>
+                        </a>
+                    {% endif %}
                     {% if user.is_staff %}
                         <a href="{% url 'viewSurvey' survey.id %}">
                             <button class="edit" type="button">Edit</button>
