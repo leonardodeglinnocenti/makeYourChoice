@@ -114,10 +114,14 @@ class DeleteUser(ListView):
 
 def delete_user(request, pk):
     user = User.objects.get(pk=pk)
-    if user.delete():
-        messages.success(request, "You have successfully deleted " + user.username)
-        return redirect('login_user')
+    if user.id == request.user.id or request.user.is_superuser:
+        if user.delete():
+            messages.success(request, "You have successfully deleted " + user.username)
+            return redirect('login_user')
+        else:
+            messages.error(request, "Something went wrong, you have not deleted the user")
+            return render(request, "deleteUser.html")
     else:
-        messages.error(request, "Something went wrong, you have not deleted the user")
+        messages.error(request, "You are not allowed to delete this user")
         return render(request, "deleteUser.html")
 

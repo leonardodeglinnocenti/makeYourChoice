@@ -16,6 +16,7 @@
         Created by: <b>{{ survey.user }}</b> <br>
         Deadline: <b>{{ survey.deadline }}</b> <br>
         Description: <b>{{ survey.description }}</b>
+        <br>
         <a href="{% url 'viewSurvey' survey.id %}">
             <button class="edit" type="button">Edit</button>
         </a>
