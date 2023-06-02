@@ -40,7 +40,9 @@ class CreateSurvey(CreateView):
     model = Survey
     fields = ['name', 'description', 'category', 'deadline']
     template_name = 'createSurvey.html'
-    success_url = reverse_lazy('manageSurveys')
+
+    def get_success_url(self):
+        return reverse_lazy('viewSurvey', kwargs={'pk': self.object.pk})
 
     # This method is called when the form is submitted and adds current user to the survey
     def form_valid(self, form):

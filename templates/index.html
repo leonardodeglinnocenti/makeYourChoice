@@ -87,16 +87,17 @@
                     {% for response in responses %}
                         {% if response.user == user and response.survey.id == survey.id %}
                             <p class="taken"> &#10004; You already answered to this survey
+                                <br>
                                 <a href="{% url 'deleteResponse' response.id %}">
                                     <button class="delete" type="button">Delete response</button>
                                 </a>
                             </p> <!-- tick -->
+                            <br> <br>
                         {% endif %}
                     {% endfor %}
                     <a href="{% url 'takeSurvey' survey.id %}">
                         <button class="open" type="button">Take</button>
                     </a>
-                    csdcsdcsdcscsdcsdc
                     {% if user.is_staff %}
                         <a href="{% url 'viewSurvey' survey.id %}">
                             <button class="edit" type="button">Edit</button>
