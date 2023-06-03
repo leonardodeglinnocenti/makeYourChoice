@@ -71,14 +71,14 @@ class Choice(models.Model):
 class Response(models.Model):
     id = models.AutoField(primary_key=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-    response = models.ForeignKey(Response, on_delete=models.CASCADE)
+    response = models.ForeignKey(Response, on_delete=models.CASCADE, null=True)
 
 
 class UserCategorySubscription(models.Model):

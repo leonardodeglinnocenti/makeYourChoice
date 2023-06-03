@@ -238,7 +238,7 @@ class TakeSurvey(ListView):
             if form.is_valid():
                 response = Response.objects.create(survey_id=self.kwargs['pk'], user_id=user.id)
                 for question in Question.objects.filter(survey_id=self.kwargs['pk']):
-                    answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id, response=response)
+                    answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id, response_id=response.id)
                     answer.save()
                     # Update the number of responses for each choice
                     choice = Choice.objects.get(pk=form.cleaned_data[question.text].id)
