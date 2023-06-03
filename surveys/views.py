@@ -302,18 +302,30 @@ class ViewResponses(ListView):
         context['questions'] = Question.objects.filter(survey_id=self.kwargs['pk'])
         context['answers'] = Answer.objects.filter(question__survey_id=self.kwargs['pk'])
         context['choices'] = Choice.objects.all()
-        context['most_votes'] = self.get_most_voted_choice().number_of_votes
-        context['less_votes'] = self.get_less_voted_choice().number_of_votes
+        context['less_voted_choices'] = self.get_least_voted_choices()
+        context['most_voted_choices'] = self.get_most_voted_choices()
         return context
 
     def get_queryset(self):
         return Answer.objects.filter(response__survey_id=self.kwargs['pk'])
 
-    def get_less_voted_choice(self):
-        return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('number_of_votes').first()
+    def get_least_voted_choices(self):
+        collector = Choice.objects.none()
+        for question in Question.objects.filter(survey_id=Survey.objects.get(pk=self.kwargs['pk'])):
+            # add to the collector the choice with the least number of votes for each question
+            number = Choice.objects.filter(question_id=question.id).order_by('number_of_votes').first().number_of_votes
+            # add to the collector all the choices that have the same number of votes as collector
+            collector = collector | Choice.objects.filter(question_id=question.id, number_of_votes=number)
+        return collector
 
-    def get_most_voted_choice(self):
-        return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('number_of_votes').last()
+    def get_most_voted_choices(self):
+        collector = Choice.objects.none()
+        for question in Question.objects.filter(survey_id=self.kwargs['pk']):
+            # get the choice with the most number of votes for each question
+            number = Choice.objects.filter(question_id=question.id).order_by('-number_of_votes').first().number_of_votes
+            # add to the collector all the choices that have the same number of votes as collector
+            collector = collector | Choice.objects.filter(question_id=question.id, number_of_votes=number)
+        return collector
 
 
 class CreateCategory(CreateView):

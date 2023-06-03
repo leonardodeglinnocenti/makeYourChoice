@@ -14,13 +14,15 @@
         <li class="title">
             <b> {{ question.text }} </b>
         </li>
+        {{ most_voted_choices }} {{ less_voted_choices }}
         {% for choice in choices %}
             {% if question.id == choice.question.id %}
                 <li>
-                    {% if choice.number_of_votes == most_votes %}
+                    <!-- Show the most selected choice for each question -->
+                    {% if choice in most_voted_choices %}
                         <b style="color: green"> {{ choice.text }} &emsp;
                         {{ choice.number_of_votes }} vote{{ choice.number_of_votes|pluralize }} </b>
-                    {% elif choice.number_of_votes == less_votes %}
+                    {% elif choice in less_voted_choices %}
                         <b style="color: darkred"> {{ choice.text }} &emsp;
                         {{ choice.number_of_votes }} vote{{ choice.number_of_votes|pluralize }} </b>
                     {% else %}
