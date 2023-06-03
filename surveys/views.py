@@ -244,7 +244,7 @@ class TakeSurvey(ListView):
                     choice.number_of_votes = choice.number_of_votes + 1
                     choice.save()
                 messages.success(request, 'Survey completed successfully')
-                return HttpResponseRedirect(reverse_lazy('index'))
+                return HttpResponseRedirect(reverse_lazy('viewResponses', kwargs={'pk': self.kwargs['pk']}))
             else:
                 return render(request, self.template_name, {'form': form, 'survey': Survey.objects.get(pk=self.kwargs['pk'])})
         else:

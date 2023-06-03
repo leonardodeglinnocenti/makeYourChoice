@@ -18,7 +18,7 @@
                 {% endif %}
             {% endfor %}
         </select>
-        <label for="deadline">Due Date:</label>
+        <label for="deadline">Deadline:</label>
         <input type="date" id="deadline" name="deadline" value="{{ survey.deadline.isoformat }}">
         <!-- If form is not valid, display error message and show with a popup where the error is-->
         {% if form.errors %}

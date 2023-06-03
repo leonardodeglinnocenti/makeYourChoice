@@ -46,6 +46,11 @@
                                 <a href="{% url 'deleteResponse' response.id %}">
                                     <button class="delete" type="button">Delete response</button>
                                 </a>
+                                {% if survey.user != user %}
+                                    <a href="{% url 'viewResponses' survey.id %}">
+                                        <button  class="open" type="button">Results</button>
+                                    </a>
+                                {% endif %}
                             </p> <!-- tick -->
                             <br> <br>
                         {% endif %}
@@ -94,6 +99,11 @@
                                 <a href="{% url 'deleteResponse' response.id %}">
                                     <button class="delete" type="button">Delete response</button>
                                 </a>
+                                {% if survey.user != user %}
+                                    <a href="{% url 'viewResponses' survey.id %}">
+                                        <button  class="open" type="button">Results</button>
+                                    </a>
+                                {% endif %}
                             </p> <!-- tick -->
                             <br> <br>
                         {% endif %}
