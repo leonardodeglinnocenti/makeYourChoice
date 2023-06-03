@@ -68,21 +68,16 @@ class Choice(models.Model):
         pass
 
 
+class Response(models.Model):
+    id = models.AutoField(primary_key=True)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-
-
-class Response(models.Model):
-    id = models.AutoField(primary_key=True)
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
-
-class AnswerResponse(models.Model):
-    id = models.AutoField(primary_key=True)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     response = models.ForeignKey(Response, on_delete=models.CASCADE)
 
 

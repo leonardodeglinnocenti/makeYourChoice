@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 
+from surveys.models import Answer, Choice, Response
 from users.models import UserFollows
 
 
@@ -122,6 +123,18 @@ class DeleteUser(ListView):
 def delete_user(request, pk):
     user = User.objects.get(pk=pk)
     if user.id == request.user.id or request.user.is_superuser:
+        # delete all the responses of the user that is being deleted, so that they don't appear in the statistics
+        # get responses ids of the current user and store them in responses
+        responses = Response.objects.filter(user_id=pk).all()
+        for response in responses:
+            # delete all the answers of the current response and update the number of votes for each choice
+            answers = Answer.objects.filter(response_id=response.id).all()
+            for answer in answers:
+                choice = Choice.objects.get(pk=answer.choice_id)
+                choice.number_of_votes -= 1
+                choice.save()
+                answer.delete()
+            response.delete()
         if user.delete():
             messages.success(request, "You have successfully deleted " + user.username)
             return redirect('login_user')

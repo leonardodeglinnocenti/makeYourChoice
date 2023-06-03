@@ -27,11 +27,11 @@
     <h2>User responses:</h2>
 
     <ul class="card">
-    {% for answer in answers_responses %}
+    {% for answer in responses %}
         {% ifchanged answer.response.id %}
             <br>
             <b>
-                User: {{ answer.response.user }} &emsp;
+                User: {{ answer.response.user.username }} &emsp;
                 Response id: {{ answer.response.id }}
             </b>
             <br>
@@ -39,8 +39,8 @@
         {% endifchanged %}
 
         <li>
-            <b> {{ answer.answer.question.text }} </b> ==>
-            {{ answer.answer.choice.text }}
+            <b> {{ answer.question.text }} </b> ==>
+            {{ answer.choice.text }}
         </li>
     {% endfor %}
     </ul>

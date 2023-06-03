@@ -7,7 +7,7 @@ from django.views.generic import ListView, CreateView, DeleteView, UpdateView, V
 import datetime
 
 from users.models import UserFollows
-from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
+from .models import Survey, Question, Choice, Response, Answer, Category, UserCategorySubscription
 from .forms import AnswerForm
 
 from django import template
@@ -238,8 +238,8 @@ class TakeSurvey(ListView):
             if form.is_valid():
                 response = Response.objects.create(survey_id=self.kwargs['pk'], user_id=user.id)
                 for question in Question.objects.filter(survey_id=self.kwargs['pk']):
-                    answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id)
-                    AnswerResponse.objects.create(answer_id=answer.id, response_id=response.id)
+                    answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id, response=response)
+                    answer.save()
                     # Update the number of responses for each choice
                     choice = Choice.objects.get(pk=form.cleaned_data[question.text].id)
                     choice.number_of_votes = choice.number_of_votes + 1
@@ -276,19 +276,15 @@ class DeleteResponse(DeleteView):
 
     def form_valid(self, form):
         if self.request.user == Response.objects.get(pk=self.object.id).user or self.request.user.is_staff:
-            messages.success(self.request, "Response deleted successfully")
-            user = self.request.user
             response = Response.objects.get(pk=self.kwargs['pk'])
-            for question in AnswerResponse.objects.filter(response_id=response.id):
+            for answer in Answer.objects.filter(response_id=response.id):
                 # Update the number of responses for each choice
-                choice = Choice.objects.get(pk=question.answer.choice_id)
+                choice = Choice.objects.get(pk=answer.choice_id)
                 choice.number_of_votes = choice.number_of_votes - 1
                 choice.save()
-            collector = AnswerResponse.objects.filter(response_id=response.id).all()
-            for answer in collector:
-                answer.delete()
-            AnswerResponse.objects.filter(response_id=response.id).all().delete()
+            Answer.objects.filter(response_id=response.id).all().delete()
             response.delete()
+            messages.success(self.request, "Response deleted successfully")
             return super().form_valid(form)
         else:
             messages.error(self.request, "You are not the owner of this response, so you cannot delete it")
@@ -296,9 +292,9 @@ class DeleteResponse(DeleteView):
 
 
 class ViewResponses(ListView):
-    model = AnswerResponse
+    model = Answer
     template_name = 'viewResponses.html'
-    context_object_name = 'answers_responses'
+    context_object_name = 'responses'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -309,7 +305,7 @@ class ViewResponses(ListView):
         return context
 
     def get_queryset(self):
-        return AnswerResponse.objects.filter(response__survey_id=self.kwargs['pk'])
+        return Answer.objects.filter(response__survey_id=self.kwargs['pk'])
 
 
 class CreateCategory(CreateView):
