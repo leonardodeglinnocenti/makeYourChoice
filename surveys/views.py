@@ -302,10 +302,18 @@ class ViewResponses(ListView):
         context['questions'] = Question.objects.filter(survey_id=self.kwargs['pk'])
         context['answers'] = Answer.objects.filter(question__survey_id=self.kwargs['pk'])
         context['choices'] = Choice.objects.all()
+        context['most_votes'] = self.get_most_voted_choice().number_of_votes
+        context['less_votes'] = self.get_less_voted_choice().number_of_votes
         return context
 
     def get_queryset(self):
         return Answer.objects.filter(response__survey_id=self.kwargs['pk'])
+
+    def get_less_voted_choice(self):
+        return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('number_of_votes').first()
+
+    def get_most_voted_choice(self):
+        return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('-number_of_votes').first()
 
 
 class CreateCategory(CreateView):

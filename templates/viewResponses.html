@@ -9,14 +9,24 @@
 
     <!-- Show all questions and answers related to a response -->
 
-    <ul>
+    <ul class="card">
     {% for question in questions %}
-        <b>Question: {{ question.text }} </b>
+        <li class="title">
+            <b> {{ question.text }} </b>
+        </li>
         {% for choice in choices %}
             {% if question.id == choice.question.id %}
                 <li>
-                    {{ choice.text }} &emsp;
-                    {{ choice.number_of_votes }} votes
+                    {% if choice.number_of_votes == most_votes %}
+                        <b style="color: green"> {{ choice.text }} &emsp;
+                        {{ choice.number_of_votes }} vote{{ choice.number_of_votes|pluralize }} </b>
+                    {% elif choice.number_of_votes == less_votes %}
+                        <b style="color: darkred"> {{ choice.text }} &emsp;
+                        {{ choice.number_of_votes }} vote{{ choice.number_of_votes|pluralize }} </b>
+                    {% else %}
+                        {{ choice.text }} &emsp;
+                        {{ choice.number_of_votes }} vote{{ choice.number_of_votes|pluralize }}
+                    {% endif %}
                 </li>
             {% endif %}
         {% endfor %}
@@ -30,10 +40,10 @@
     {% for answer in responses %}
         {% ifchanged answer.response.id %}
             <br>
-            <b>
+            <li class="title">
                 User: {{ answer.response.user.username }} &emsp;
                 Response id: {{ answer.response.id }}
-            </b>
+            </li>
             <br>
             <br>
         {% endifchanged %}
