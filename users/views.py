@@ -55,7 +55,8 @@ def search_user(request):
     # create a method to search for users using the search bar
     if request.method == "POST":
         search_text = request.POST['search_text']
-        users = User.objects.filter(username__contains=search_text)
+        # make it not case sensitive
+        users = User.objects.filter(username__icontains=search_text)
         # get the users that the current user is following with the UserFollows model, selecting only the followed_user
         followed_users = UserFollows.objects.filter(user=request.user).values_list('followed_user', flat=True)
         return render(request, 'searchUser.html', {'users': users, 'followed_users': followed_users})

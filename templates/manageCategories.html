@@ -8,6 +8,7 @@
                 <br>
                 Created by: {{ category.user }}
                 <!-- Show all choices related to a question -->
+                <br>
                 {% if category.user == user or user.is_staff %}
                     <a href="{% url 'deleteCategory' category.id %}">
                         <button class="delete" type="button">Delete</button>
