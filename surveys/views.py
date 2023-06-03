@@ -313,7 +313,7 @@ class ViewResponses(ListView):
         return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('number_of_votes').first()
 
     def get_most_voted_choice(self):
-        return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('-number_of_votes').first()
+        return Choice.objects.filter(question__survey_id=self.kwargs['pk']).order_by('number_of_votes').last()
 
 
 class CreateCategory(CreateView):
