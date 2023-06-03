@@ -67,6 +67,13 @@ class ManageFollowedUsers(ListView):
     template_name = 'manageFollowedUsers.html'
     context_object_name = 'followed_users'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        # get all users that follow the current user using the UserFollows model
+        context = super(ManageFollowedUsers, self).get_context_data(**kwargs)
+        context['followers'] = UserFollows.objects.filter(followed_user=self.request.user)
+        context['following'] = UserFollows.objects.filter(user=self.request.user).values_list('followed_user', flat=True)
+        return context
+
     def get_queryset(self):
         return UserFollows.objects.filter(user=self.request.user)
 

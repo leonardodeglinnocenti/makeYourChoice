@@ -25,9 +25,10 @@
                 <option value="{{ category.id }}" id="info">{{ category.name }}</option>
             {% endfor %}
         </select>
-        <label for="deadline">Due Date:</label>
+        <label for="deadline">Deadline:</label>
         <input type="date" id="deadline" name="deadline">
         <!-- If form is not valid, display error message and show with a popup where the error is-->
+        <p style="color: darkred">Keep in mind that if the date you enter is earlier than the current date, you won't be able to submit the form. However, you will be able to edit it freely later to hide it from the homepage (which only shows surveys that have not yet expired).</p>
         {% if form.errors %}
             {% if form.deadline.errors %}
                 <p style="color: red">Please select a valid date.</p>

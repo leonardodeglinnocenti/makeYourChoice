@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, View
+import datetime
 
 from users.models import UserFollows
 from .models import Survey, Question, Choice, Answer, Response, AnswerResponse, Category, UserCategorySubscription
@@ -31,6 +32,7 @@ class ViewSurveys(ListView):
             # get all the surveys made by the users the current user is following
             context['followed_users_surveys'] = Survey.objects.filter(user__in=User.objects.filter(pk__in=UserFollows.objects.filter(user=self.request.user).values_list('followed_user', flat=True)))
             context['taken_surveys'] = Survey.objects.filter(response__in=Response.objects.filter(user=self.request.user))
+            context['today'] = datetime.date.today()
         return context
 
     def get_queryset(self):
@@ -47,6 +49,10 @@ class CreateSurvey(CreateView):
 
     # This method is called when the form is submitted and adds current user to the survey
     def form_valid(self, form):
+        # Check whether if today's date precedes the deadline
+        if form.instance.deadline < datetime.date.today():
+            messages.error(self.request, "Deadline must be in the future")
+            return HttpResponseRedirect(reverse_lazy('createSurvey'))
         form.instance.user = self.request.user
         return super().form_valid(form)
 

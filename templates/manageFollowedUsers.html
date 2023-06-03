@@ -7,9 +7,9 @@
     {% csrf_token %}
 
     {% if followed_users %}
-        <h3> You are following {{ followed_users|length }} users </h3>
+        <p> You are following {{ followed_users|length }} user{{ followers|pluralize }} </p>
     {% else %}
-        <h3> You are not following any users </h3>
+        <p style="color: darkorange"> You are not following any users </p>
     {% endif %}
 
     <!-- get followed_users and display them -->
@@ -29,5 +29,28 @@
     <a href="{% url 'search_user' %}">
         <button class="new" type="button">Add new users</button>
     </a>
+
+    <h2> Users that follow me </h2>
+
+    {% if followers %}
+        <p> {{ followers|length }} user{{ followers|pluralize }} follow{% if followers|length == 1 %}s{% endif %} you </p>
+        <ul class="card">
+        {% for follower in followers %}
+            <li>
+                {{ follower.user.username }}
+                {% if follower.user.id not in following %}
+                    <a href="{% url 'follow_user' follower.user.id %}">
+                        <button class="subscribe"> Follow </button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'unfollow_user' follower.user.id %}">
+                        <button class="unsubscribe"> Unfollow </button>
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    {% else %}
+        <h3> No users follow you </h3>
+    {% endif %}
 
 {% endblock %}
