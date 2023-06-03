@@ -33,6 +33,7 @@ class ViewSurveys(ListView):
             context['followed_users_surveys'] = Survey.objects.filter(user__in=User.objects.filter(pk__in=UserFollows.objects.filter(user=self.request.user).values_list('followed_user', flat=True)))
             context['taken_surveys'] = Survey.objects.filter(response__in=Response.objects.filter(user=self.request.user))
             context['today'] = datetime.date.today()
+            context['is_expiring'] = Survey.objects.filter(deadline__lte=datetime.date.today() + datetime.timedelta(days=3)).values_list('pk', flat=True)
         return context
 
     def get_queryset(self):

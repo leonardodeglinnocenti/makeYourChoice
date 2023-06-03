@@ -46,7 +46,7 @@
                                 <a href="{% url 'deleteResponse' response.id %}">
                                     <button class="delete" type="button">Delete response</button>
                                 </a>
-                                {% if survey.user != user %}
+                                {% if survey.user != user and not user.is_staff %}
                                     <a href="{% url 'viewResponses' survey.id %}">
                                         <button  class="open" type="button">Results</button>
                                     </a>
@@ -55,6 +55,10 @@
                             <br> <br>
                         {% endif %}
                     {% endfor %}
+                    <!-- Put a warning if the survey is expiring -->
+                    {% if survey.id in is_expiring and survey not in taken_surveys %}
+                            <p class="expiring"> This survey is expiring! </p>
+                    {% endif %}
                     {% if survey not in taken_surveys %}
                         <a href="{% url 'takeSurvey' survey.id %}">
                             <button class="take" type="button">Take</button>
@@ -99,7 +103,7 @@
                                 <a href="{% url 'deleteResponse' response.id %}">
                                     <button class="delete" type="button">Delete response</button>
                                 </a>
-                                {% if survey.user != user %}
+                                {% if survey.user != user and not user.is_staff %}
                                     <a href="{% url 'viewResponses' survey.id %}">
                                         <button  class="open" type="button">Results</button>
                                     </a>
@@ -108,6 +112,10 @@
                             <br> <br>
                         {% endif %}
                     {% endfor %}
+                    <!-- Put a warning if the survey is expiring -->
+                    {% if survey.id in is_expiring and survey not in taken_surveys %}
+                            <p class="expiring"> This survey is expiring! </p>
+                    {% endif %}
                     {% if survey not in taken_surveys %}
                         <a href="{% url 'takeSurvey' survey.id %}">
                             <button class="take" type="button">Take</button>
