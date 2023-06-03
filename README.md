@@ -2,10 +2,10 @@
 Progetto di backend per l'esame "Progettazione e Produzione Multimediale", Laurea Triennale in Ingegneria Informatica presso l'Università degli Studi di Firenze.
 
 ## Key features
-- [ ] Users can select topics that are interested in by subscribing to "categories".
-- [ ] Users can search and follow other users to see all of their surveys without filters.
-- [ ] After a survey has reached its deadline, it only remains accessible to the user that created it through the page "Manage my surveys".
-- [ ] When a survey is about to expire and a user still hasn't taken it, a message appears informing the user about the imminent deadline.
+- [x] Users can select topics that are interested in by subscribing to "categories".
+- [x] Users can search and follow other users to see all of their surveys without filters.
+- [x] After a survey has reached its deadline, it only remains accessible to the user that created it through the page "Manage my surveys".
+- [x] When a survey is about to expire and a user still hasn't taken it, a message appears informing the user about the imminent deadline.
 
 ## Security measures
 1. You cannot force an action by trying to access a page that you are not allowed to access. For example, if you are not logged in and/or you aren't the owner of a survey, you cannot delete it by accessing the "Delete Survey" page and passing the survey id as a parameter in the browser url bar.
