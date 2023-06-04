@@ -17,6 +17,14 @@
         Deadline: <b>{{ survey.deadline }}</b> <br>
         Description: <b>{{ survey.description }}</b>
         <br>
+        {% if not survey.ready %}
+            <p class="expiring"> This survey is marked as "not ready" and cannot be taken yet! </p>
+            <br>
+            <a href="{% url 'markReady' survey.id %}">
+                <button class="ready" type="button">Mark ready</button>
+            </a>
+        {% endif %}
+
         <a href="{% url 'viewSurvey' survey.id %}">
             <button class="edit" type="button">Edit</button>
         </a>

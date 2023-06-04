@@ -30,7 +30,7 @@
         {% endif %}
         <ul class="card">
             {% for survey in surveys %}
-                {% if survey in subscribed_surveys and survey.deadline >= today %}
+                {% if survey in subscribed_surveys and survey.deadline >= today and survey.ready %}
                     <li>
                         <h2>{{ survey.name }} </h2>
                         Category: <b>{{ survey.category }}</b> <br>
@@ -87,7 +87,7 @@
         {% endif %}
         <ul class="card">
             {% for survey in surveys %}
-                {% if survey in followed_users_surveys and survey.deadline >= today %}
+                {% if survey in followed_users_surveys and survey.deadline >= today and survey.ready %}
                     <li>
                         <h2>{{ survey.name }} </h2>
                         Category: <b>{{ survey.category }}</b> <br>

@@ -230,26 +230,30 @@ class TakeSurvey(ListView):
     # and link them to the Response object. The AnswerResponse object links the Answer and Response objects through
     # their ids.
     def post(self, request, *args, **kwargs):
-        # Check to see if the user has already taken the survey
         user = request.user
         survey = Survey.objects.get(pk=self.kwargs['pk'])
-        if not Response.objects.filter(survey_id=survey, user_id=user).exists():
-            form = AnswerForm(request.POST, choices=Choice.objects.filter(question__survey_id=self.kwargs['pk']))
-            if form.is_valid():
-                response = Response.objects.create(survey_id=self.kwargs['pk'], user_id=user.id)
-                for question in Question.objects.filter(survey_id=self.kwargs['pk']):
-                    answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id, response_id=response.id)
-                    answer.save()
-                    # Update the number of responses for each choice
-                    choice = Choice.objects.get(pk=form.cleaned_data[question.text].id)
-                    choice.number_of_votes = choice.number_of_votes + 1
-                    choice.save()
-                messages.success(request, 'Survey completed successfully')
-                return HttpResponseRedirect(reverse_lazy('viewResponses', kwargs={'pk': self.kwargs['pk']}))
+        if survey.ready:
+            # Check to see if the user has already taken the survey
+            if not Response.objects.filter(survey_id=survey, user_id=user).exists():
+                form = AnswerForm(request.POST, choices=Choice.objects.filter(question__survey_id=self.kwargs['pk']))
+                if form.is_valid():
+                    response = Response.objects.create(survey_id=self.kwargs['pk'], user_id=user.id)
+                    for question in Question.objects.filter(survey_id=self.kwargs['pk']):
+                        answer = Answer.objects.create(question_id=question.id, choice_id=form.cleaned_data[question.text].id, response_id=response.id)
+                        answer.save()
+                        # Update the number of responses for each choice
+                        choice = Choice.objects.get(pk=form.cleaned_data[question.text].id)
+                        choice.number_of_votes = choice.number_of_votes + 1
+                        choice.save()
+                    messages.success(request, 'Survey completed successfully')
+                    return HttpResponseRedirect(reverse_lazy('viewResponses', kwargs={'pk': self.kwargs['pk']}))
+                else:
+                    return render(request, self.template_name, {'form': form, 'survey': Survey.objects.get(pk=self.kwargs['pk'])})
             else:
-                return render(request, self.template_name, {'form': form, 'survey': Survey.objects.get(pk=self.kwargs['pk'])})
+                messages.error(request, 'You have already taken this survey.')
+                return HttpResponseRedirect(reverse_lazy('index'))
         else:
-            messages.error(request, 'You have already taken this survey.')
+            messages.error(request, 'This survey is not ready yet.')
             return HttpResponseRedirect(reverse_lazy('index'))
 
     def get(self, request, *args, **kwargs):
@@ -439,6 +443,34 @@ class ManageSurveys(ListView):
         # get all surveys that the user owns
         context['owned_surveys'] = Survey.objects.filter(user=self.request.user)
         return context
+
+
+def mark_ready(request, pk):
+    # this function is called when a user clicks the mark ready button on a survey
+    # it marks the survey as ready and redirects the user to the manage surveys page
+    if request.user.id == Survey.objects.get(pk=pk).user.id or request.user.is_staff:
+        survey = Survey.objects.get(pk=pk)
+        survey.ready = True
+        survey.save()
+        messages.success(request, "You have successfully marked this survey as ready!")
+        return HttpResponseRedirect(reverse_lazy('viewSurvey', kwargs={'pk': pk}))
+    else:
+        messages.error(request, "You are not the owner of this survey, so you cannot mark it as ready")
+        return HttpResponseRedirect(reverse_lazy('index'))
+
+
+def mark_not_ready(request, pk):
+    # this function is called when a user clicks the mark not ready button on a survey
+    # it marks the survey as not ready and redirects the user to the manage surveys page
+    if request.user.id == Survey.objects.get(pk=pk).user.id or request.user.is_staff:
+        survey = Survey.objects.get(pk=pk)
+        survey.ready = False
+        survey.save()
+        messages.success(request, "You have successfully marked this survey as not ready!")
+        return HttpResponseRedirect(reverse_lazy('viewSurvey', kwargs={'pk': pk}))
+    else:
+        messages.error(request, "You are not the owner of this survey, so you cannot mark it as not ready")
+        return HttpResponseRedirect(reverse_lazy('index'))
 
 
 class Instructions(View):

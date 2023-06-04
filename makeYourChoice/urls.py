@@ -44,4 +44,6 @@ urlpatterns = [
     path('editSurvey/<int:pk>/', views.EditSurvey.as_view(), name='editSurvey'),
     path('deleteResponse/<int:pk>/', views.DeleteResponse.as_view(), name='deleteResponse'),
     path('instructions/', views.Instructions.as_view(), name='instructions'),
+    path('markReady/<int:pk>/', views.mark_ready, name='markReady'),
+    path('markNotReady/<int:pk>/', views.mark_not_ready, name='markNotReady'),
 ]

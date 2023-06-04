@@ -12,6 +12,19 @@
     <a href="{% url 'editSurvey' survey.id %}">
         <button class="edit" type="button">Edit survey parameters</button>
     </a>
+    <a href="{% url 'deleteSurvey' survey.id %}">
+        <button class="delete" type="button">Delete survey</button>
+    </a>
+    {% if not survey.ready %}
+        <a href="{% url 'markReady' survey.id %}">
+            <button class="ready" type="button">Mark ready</button>
+        </a>
+        <p class="expiring"> This survey is marked as "not ready" and cannot be taken yet! </p>
+    {% else %}
+        <a href="{% url 'markNotReady' survey.id %}">
+            <button class="not-ready" type="button">Mark not ready</button>
+        </a>
+    {% endif %}
 
     <ul class="card">
         {% for question in questions %}

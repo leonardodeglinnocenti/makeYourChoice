@@ -26,6 +26,7 @@ class Survey(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     deadline = models.DateField(null=True)
+    ready = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

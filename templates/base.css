@@ -146,6 +146,26 @@ button.submit {
   background-color: lightblue;
 }
 
+button.ready {
+  color: black;
+  background-color: lightgreen;
+}
+
+button.ready:hover {
+  color: white;
+  background-color: #4CAF50;
+}
+
+button.not-ready {
+  color: black;
+  background-color: lightgray;
+}
+
+button.not-ready:hover {
+  color: white;
+  background-color: grey;
+}
+
 /* Make the input field look like the ones in Material Design */
 input[type=text], select, textarea {
   width: 100%;
