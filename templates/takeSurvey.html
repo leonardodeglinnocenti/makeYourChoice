@@ -3,11 +3,27 @@
 
 <form method="post" onclick="{% url 'viewSurvey' survey.id %}">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-    <a href="{% url 'index' %}">
-        <button class="cancel-link" type="button">Cancel</button>
-    </a>
+    <div class="survey-form">
+        <br>
+        <p style="font-size: 25px">Survey: <b>{{ survey.name }}</b></p>
+        <br>
+        {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                <div class="fieldLabel">{{ field.label_tag }}</div>
+                <br>
+                {% for choice in field %}
+                    <!-- get the first element of the tuple -->
+                    <div class="fieldChoice"> {{ choice }} </div>
+                {% endfor %}
+            </div>
+            <br> <br> &emsp;
+        {% endfor %}
+        <input type="submit" value="Submit">
+        <a href="{% url 'index' %}">
+            <button class="cancel-link" type="button">Cancel</button>
+        </a>
+    </div>
 </form>
 
 
