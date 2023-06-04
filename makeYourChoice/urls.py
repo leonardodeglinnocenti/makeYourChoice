@@ -35,6 +35,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('createCategory/', views.CreateCategory.as_view(), name='createCategory'),
     path('deleteCategory/<int:pk>/', views.DeleteCategory.as_view(), name='deleteCategory'),
+    path('editCategory/<int:pk>/', views.EditCategory.as_view(), name='editCategory'),
     path('manageCategories/', views.ManageCategories.as_view(), name='manageCategories'),
     # make path to call subscribe_to_category function
     path('subscribeToCategory/<int:pk>/', views.subscribe_to_category, name='subscribeToCategory'),

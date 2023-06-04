@@ -362,6 +362,28 @@ class DeleteCategory(DeleteView):
             return HttpResponseRedirect(reverse_lazy('manageCategories'))
 
 
+class EditCategory(UpdateView):
+    model = Category
+    fields = ['name']
+    template_name = 'editCategory.html'
+
+    def get_success_url(self):
+        return reverse_lazy('manageCategories')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Category.objects.get(pk=self.kwargs['pk'])
+        return context
+
+    # Checks whether the user is the owner of the category or is a staff member
+    def form_valid(self, form):
+        if self.request.user == Category.objects.get(pk=self.kwargs['pk']).user or self.request.user.is_staff:
+            return super().form_valid(form)
+        else:
+            messages.error(self.request, "You are not the owner of this category, so you cannot edit it")
+            return HttpResponseRedirect(reverse_lazy('manageCategories'))
+
+
 class ManageCategories(ListView):
     model = Category
     template_name = 'manageCategories.html'
