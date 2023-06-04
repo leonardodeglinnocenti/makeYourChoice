@@ -17,6 +17,9 @@
             {{ field }}
         {% endfor %}
         <input type="submit" name="submit" value="Rename" />
+        <a href="{% url 'manageCategories' %}">
+            <button class="cancel-link" type="button">Cancel</button>
+        </a>
     </form>
 {% endblock %}
 ```

@@ -223,6 +223,15 @@ ul.card li.title {
   margin-bottom: 10px;
 }
 
+ul.card li.title-user {
+  background-color: #709cea;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
 ul.card li button {
   /* Align to the right */
   float: right;

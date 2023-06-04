@@ -41,7 +41,7 @@
     {% for answer in responses %}
         {% ifchanged answer.response.id %}
             <br>
-            <li class="title">
+            <li class="title-user">
                 User: {{ answer.response.user.username }} &emsp;
                 Response id: {{ answer.response.id }}
             </li>
@@ -50,8 +50,8 @@
         {% endifchanged %}
 
         <li>
-            <b> {{ answer.question.text }} </b> ==>
-            {{ answer.choice.text }}
+            {{ answer.question.text }} ==>
+            <b>{{ answer.choice.text }}</b>
         </li>
     {% endfor %}
     </ul>

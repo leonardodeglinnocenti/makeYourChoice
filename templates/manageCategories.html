@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
+    <!-- Create a Django button to create a new category -->
+    <br>
+    <a href="{% url 'createCategory' %}">
+        <button class="new" type="button">Create a new category</button>
+    </a>
+
     <ul class="card">
         {% for category in categories %}
             <li>
@@ -32,10 +38,7 @@
             <!-- Add link to delete this question -->
         {% endfor %}
     </ul>
-    <!-- Create a Django button to create a new category -->
-    <a href="{% url 'createCategory' %}">
-        <button class="new" type="button">Create a new category</button>
-    </a>
+
     <a href="{% url 'index' %}">
         <button class="home" type="button">Back to surveys</button>
     </a>

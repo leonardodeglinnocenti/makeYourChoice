@@ -11,7 +11,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit">
-        <a href="{% url 'index' %}">
+        <a href="{% url 'manageCategories' %}">
             <button class="cancel-link" type="button">Cancel</button>
         </a>
     </form>

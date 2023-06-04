@@ -12,6 +12,10 @@
         <p style="color: darkorange"> You are not following any users </p>
     {% endif %}
 
+    <a href="{% url 'search_user' %}">
+        <button class="new" type="button">Add new users</button>
+    </a>
+
     <!-- get followed_users and display them -->
     <ul class="card">
     {% for user in followed_users %}
@@ -25,10 +29,6 @@
         <br>
     {% endfor %}
     </ul>
-
-    <a href="{% url 'search_user' %}">
-        <button class="new" type="button">Add new users</button>
-    </a>
 
     <h2> Users that follow me </h2>
 
@@ -49,6 +49,7 @@
                 {% endif %}
             </li>
         {% endfor %}
+        </ul>
     {% else %}
         <h3> No users follow you </h3>
     {% endif %}
