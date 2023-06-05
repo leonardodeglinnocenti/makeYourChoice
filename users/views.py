@@ -116,6 +116,9 @@ class DeleteUser(View):
     def get_queryset(self):
         return User.objects.filter(pk=self.request.user.pk)
 
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 
 def delete_user(request, pk):
     user = User.objects.get(pk=pk)
