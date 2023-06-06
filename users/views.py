@@ -13,6 +13,7 @@ from users.models import UserFollows
 
 
 def login_user(request):
+    # check if previous_page is in the request.GET dictionary
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -20,12 +21,18 @@ def login_user(request):
         if user is not None:
             login(request, user)
             messages.success(request, "You have successfully logged in")
-            return redirect("index")
+            previous_page = request.POST['next']
+            if previous_page == "None":
+                previous_page = reverse_lazy("index")
+            # redirect to where the user was before logging in except when the user was already on the login page
+            return redirect(previous_page)
         else:
             messages.error(request, "Error logging in")
             return redirect("login_user")
     else:
-        return render(request, "login.html")
+        # get "next" object from request.GET dictionary
+        previous_page = request.GET.get('next')
+        return render(request, "login.html", {'previous_page': previous_page})
 
 
 def logout_user(request):
@@ -44,10 +51,18 @@ def register_user(request):
             user = authenticate(request, username=username, password=password)
             login(request, user)
             messages.success(request, "You have successfully registered")
-            return redirect('index')
+            # redirect to where the user was before registering except when the user was already on the register page
+            previous_page = request.POST['next']
+            # if the previous page doesn't contain '?next=' then redirect to index
+            if "?next=" not in previous_page:
+                previous_page = reverse_lazy("index")
+            # extract the text after '?next='
+            previous_page = previous_page.split('?next=')[1]
+            return redirect(previous_page)
     else:
         form = UserCreationForm()
-    return render(request, "register.html", {"form": form, })
+    previous_page = request.META.get('HTTP_REFERER')
+    return render(request, "register.html", {"form": form, "previous_page": previous_page})
 
 
 # Manage users followed by the current user

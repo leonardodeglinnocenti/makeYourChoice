@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, View
@@ -233,6 +233,7 @@ class TakeSurvey(ListView):
         user = request.user
         survey = Survey.objects.get(pk=self.kwargs['pk'])
         if survey.ready:
+            # If the user is not logged in, redirect them to the login page
             # Check to see if the user has already taken the survey
             if not Response.objects.filter(survey_id=survey, user_id=user).exists():
                 form = AnswerForm(request.POST, choices=Choice.objects.filter(question__survey_id=self.kwargs['pk']))
@@ -257,6 +258,9 @@ class TakeSurvey(ListView):
             return HttpResponseRedirect(reverse_lazy('index'))
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            # redirect to login page by passing the current url as the next parameter
+            return HttpResponseRedirect(reverse_lazy('login_user') + '?next=' + request.path)
         form = AnswerForm(choices=Choice.objects.filter(question__survey_id=self.kwargs['pk']))
         return render(request, self.template_name, {'form': form, 'survey': Survey.objects.get(pk=self.kwargs['pk'])})
 
