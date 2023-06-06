@@ -7,8 +7,9 @@ Progetto di backend per l'esame "Progettazione e Produzione Multimediale", Laure
 - [x] After a survey has reached its deadline, it only remains accessible to the user that created it through the page "Manage my surveys".
 - [x] When a survey is about to expire and a user still hasn't taken it, a message appears informing the user about the imminent deadline.
 - [x] When a user deletes its account all its data is safely removed and statistics are updated.
-- [x] **If a user opens a link to take a survey without being logged in, he/she is redirected to the login page. After logging in, the user is redirected to the survey page.**
-- [x] **If a user opens a link to take a survey without being registered, he/she is redirected to the login page. If the user clicks on the register button, he/she is redirected to the registration page and after the registration is completed, the user is redirected to the survey page.**
+- [x] **If a user opens a shared link to take a survey without being logged in, he/she is redirected to the login page. After logging in, the user is redirected to the survey page.**
+- [x] **If a user opens a shared link to take a survey without being registered, he/she is redirected to the login page. If the user clicks on the register button, he/she is redirected to the registration page and after the registration is completed, the user is redirected to the survey page.**
+- [x] The website is optimized to be used from mobile devices (a simple JS implementation improves the experience when using the menu)
 
 ## Security measures
 1. You cannot force an action by trying to access a page that you are not allowed to access. For example, if you are not logged in and/or you aren't the owner of a survey, you cannot delete it by accessing the "Delete Survey" page and passing the survey id as a parameter in the browser url bar.
@@ -16,8 +17,7 @@ Progetto di backend per l'esame "Progettazione e Produzione Multimediale", Laure
 3. Before a critical action is performed, a confirmation message is displayed to the user.
 4. When a survey is deleted, all the related questions and choices are deleted as well.
 5. When a category is deleted, all the related surveys are deleted as well.
-6. When a user is deleted, all the related surveys are deleted as well.
-7. When a user is deleted, all the related subscriptions are deleted as well.
+6. When a user is deleted, all the surveys he/she created and all personal data are deleted as well. He/She is also removed from the statistics of the various other surveys.
 
 ## Instructions
 
@@ -30,6 +30,7 @@ Progetto di backend per l'esame "Progettazione e Produzione Multimediale", Laure
 2. To create a new survey it's necessary to verify whether the category already exists or not. If it doesn't exist, you can create it by pressing Manage categories. If it exists, you can select it from a list during the creation of the survey.
 3. After creating a survey, you can add questions to it by pressing Add Questions.
 4. After adding questions, you can add choices to each question by pressing Add Choices.
+5. To make the survey visible in the homepage of interested users it's necessary to press the "Mark Ready" button, that also allow users to take it.
 
 ### Manage surveys
 1. To manage surveys, you can press the Manage surveys page to see the list of surveys that you have created.
