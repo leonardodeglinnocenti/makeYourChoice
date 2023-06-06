@@ -55,7 +55,7 @@ def register_user(request):
             previous_page = request.POST['next']
             # if the previous page doesn't contain '?next=' then redirect to index
             if "?next=" not in previous_page:
-                previous_page = reverse_lazy("index")
+                return redirect(reverse_lazy("index"))
             # extract the text after '?next='
             previous_page = previous_page.split('?next=')[1]
             return redirect(previous_page)
