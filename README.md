@@ -1,6 +1,8 @@
 # makeYourChoice
 Progetto di backend per l'esame "Progettazione e Produzione Multimediale", Laurea Triennale in Ingegneria Informatica presso l'Università degli Studi di Firenze.
 
+# NOTE: the code isn't up to date and contains unpatched vulnerabilities. This is code isn't thought for real applications.
+
 ## Key features
 - [x] Users can select topics that are interested in by subscribing to "categories".
 - [x] Users can search and follow other users to see all of their surveys without filters.
